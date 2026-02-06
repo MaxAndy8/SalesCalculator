@@ -1,7 +1,7 @@
 #pragma once
 #include <QApplication>
 
-namespace SC {
+namespace SC::APP {
 
 class Application : public QApplication {
     Q_OBJECT
@@ -10,4 +10,4 @@ public:
     virtual ~Application();
 };
 
-} // namespace SC
+} // namespace SC::APP

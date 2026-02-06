@@ -1,10 +1,11 @@
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "BaseCatalogSelectForm.h"
+#include "ui_BaseCatalogSelectForm.h"
 
-namespace SC::UI {
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+
+namespace SC::UI::Base {
+BaseCatalogSelectForm::BaseCatalogSelectForm(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::BaseCatalogSelectForm)
 {
     ui->setupUi(this);
 
@@ -14,11 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
     // Встановлюємо її як заголовок вікна
     setWindowTitle(className);
 
-
 }
 
-MainWindow::~MainWindow()
+BaseCatalogSelectForm::~BaseCatalogSelectForm()
 {
     delete ui;
 }
-}//namespace SC::UI
+} // namespace SC::UI::Base

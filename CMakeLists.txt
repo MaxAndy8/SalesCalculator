@@ -8,8 +8,8 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
 #add_subdirectory(core)
 #add_subdirectory(infrastructure)
-#add_subdirectory(ui)
-add_subdirectory(app)
+add_subdirectory(ui)  # Спочатку інтерфейс
+add_subdirectory(app) # Потім додаток, який його використовує
 
 
 

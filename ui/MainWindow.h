@@ -7,7 +7,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-namespace SC {
+namespace SC::UI {
 
 class MainWindow : public QMainWindow
 {
@@ -21,4 +21,4 @@ private:
     Ui::MainWindow *ui;
 };
 
-}//namespace SC
+}//namespace SC::UI

@@ -1,10 +1,10 @@
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "BaseCatalogObjectForm.h"
+#include "ui_BaseCatalogObjectForm.h"
 
-namespace SC::UI {
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+namespace SC::UI::Base {
+BaseCatalogObjectForm::BaseCatalogObjectForm(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::BaseCatalogObjectForm)
 {
     ui->setupUi(this);
 
@@ -17,8 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-MainWindow::~MainWindow()
+BaseCatalogObjectForm::~BaseCatalogObjectForm()
 {
     delete ui;
 }
-}//namespace SC::UI
+} // namespace SC::UI::Base
