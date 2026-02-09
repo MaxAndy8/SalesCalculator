@@ -1,39 +1,95 @@
-# 1. Створюємо бібліотеку
-add_library(libUiMainWindow STATIC
-    MainWindow.h
-    MainWindow.cpp
-    MainWindow.ui
+# =====================================
+# UI layer – executable
+# =====================================
+
+set(UI_SOURCES
+    main.cpp
+
+    # Application
+    application/ScApplication.h
+    application/ScApplication.cpp
+
+    # Main window
+    windows/MainWindow.cpp
+    windows/MainWindow.h
+    windows/MainWindow.ui
+
+    # Dialogs
+    dialogs/SelectDatabaseDialog.cpp
+    dialogs/SelectDatabaseDialog.h
+    dialogs/SelectDatabaseDialog.ui
+
+    # # dialogs/authdialog.cpp
+    # # dialogs/authdialog.h
+    # # dialogs/authdialog.ui
+
+    # # # Catalog forms (example)
+    # # forms/catalog/basecataloglistform.cpp
+    # # forms/catalog/basecataloglistform.h
+    # # forms/catalog/basecataloglistform.ui
+
+    # # forms/catalog/basecatalogobjectform.cpp
+    # # forms/catalog/basecatalogobjectform.h
+    # # forms/catalog/basecatalogobjectform.ui
+
+    # # forms/catalog/nomenclaturelistform.cpp
+    # # forms/catalog/nomenclaturelistform.h
+    # # forms/catalog/nomenclaturelistform.ui
+
+    # # forms/catalog/nomenclatureobjectform.cpp
+    # # forms/catalog/nomenclatureobjectform.h
+    # # forms/catalog/nomenclatureobjectform.ui
 )
 
-# 2. Вмикаємо інструменти Qt для бібліотеки
-set_target_properties(libUiMainWindow PROPERTIES
-    AUTOMOC ON
-    AUTOUIC ON
-    # AUTORCC ON
+add_executable(SalesCalculator
+    ${UI_SOURCES}
 )
 
-# 3. Налаштовуємо інклуди (це важливо для зручності в IDE)
-target_include_directories(libUiMainWindow
-    PUBLIC
-        "${CMAKE_CURRENT_SOURCE_DIR}"       # папка ui
+# -------------------------------------
+# Qt
+# -------------------------------------
+target_link_libraries(SalesCalculator
     PRIVATE
-        "${CMAKE_CURRENT_BINARY_DIR}"       # тут лежать ui_*.h
+        Qt6::Core
+        Qt6::Widgets
+        Qt6::Sql
 )
 
-# 4. Підключаємо Qt (PUBLIC, щоб тести теж бачили Qt)
-target_link_libraries(libUiMainWindow PUBLIC
-    Qt6::Widgets)
+# # # -------------------------------------
+# # # Internal dependencies
+# # # -------------------------------------
+# # target_link_libraries(SalesCalculator
+# #     PRIVATE
+# #         sc_application
+# #         sc_domain
+# #         sc_infrastructure
+# # )
 
-
-
-add_subdirectory(base)
-# add_subdirectory(catalogs)
-# add_subdirectory(documents)
-
-add_library(ui INTERFACE)
-
-target_link_libraries(ui
-    INTERFACE        
-        libUiMainWindow
-        libUiBase
+# -------------------------------------
+# Include paths
+# -------------------------------------
+target_include_directories(SalesCalculator
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+# # # -------------------------------------
+# # # Compile options
+# # # -------------------------------------
+# # target_compile_definitions(SalesCalculator
+# #     PRIVATE
+# #         SC_UI_LAYER
+# # )
+
+# # # -------------------------------------
+# # # Resources
+# # # -------------------------------------
+# # # (icons, styles, etc.)
+# # # Handled via AUTORCC if .qrc files are added
+
+# # # -------------------------------------
+# # # Install
+# # # -------------------------------------
+# # install(TARGETS SalesCalculator
+# #     RUNTIME DESTINATION bin
+# # )
