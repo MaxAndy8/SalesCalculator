@@ -49,7 +49,7 @@ option(SC_ENABLE_TESTS "Enable tests" OFF)
 # Subprojects (layers)
 # ================================
 
-# # add_subdirectory(core)
+add_subdirectory(core)
 # # add_subdirectory(infrastructure)
 add_subdirectory(ui)
 

@@ -1,6 +1,8 @@
 #include "SelectDatabaseDialog.h"
 #include "ui_SelectDatabaseDialog.h"
 
+#include "EditDatabaseDialog.h"
+
 #include <QMessageBox>
 #include <QSettings>
 
@@ -41,11 +43,11 @@ SelectDatabaseDialog::SelectDatabaseDialog(QWidget *parent)
     // 🔹 Опціонально: без рамки
     ui->tableViewDatabases->setFrameShape(QFrame::NoFrame);
 
-    connect(ui->btnAdd,    &QPushButton::clicked, this, &SelectDatabaseDialog::addDatabase);
-    connect(ui->btnEdit,   &QPushButton::clicked, this, &SelectDatabaseDialog::editDatabase);
+    connect(ui->btnAdd,    &QPushButton::clicked, this, &SelectDatabaseDialog::addDatabase   );
+    connect(ui->btnEdit,   &QPushButton::clicked, this, &SelectDatabaseDialog::editDatabase  );
     connect(ui->btnRemove, &QPushButton::clicked, this, &SelectDatabaseDialog::removeDatabase);
     connect(ui->btnSelect, &QPushButton::clicked, this, &SelectDatabaseDialog::selectDatabase);
-    connect(ui->btnCancel, &QPushButton::clicked, this, &QDialog::reject);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &QDialog::reject                     );
 }
 
 SelectDatabaseDialog::~SelectDatabaseDialog()
@@ -57,9 +59,9 @@ SelectDatabaseDialog::~SelectDatabaseDialog()
  *  Public
  * ========================= */
 
-DatabaseConnectionInfo SelectDatabaseDialog::selectedDatabase() const
+SC::Core::DB::DatabaseConnectionInfo SelectDatabaseDialog::selectedDatabase() const
 {
-    DatabaseConnectionInfo info;
+    SC::Core::DB::DatabaseConnectionInfo info;
 
     if (m_selectedRow < 0)
         return info;
@@ -79,14 +81,93 @@ DatabaseConnectionInfo SelectDatabaseDialog::selectedDatabase() const
 
 void SelectDatabaseDialog::addDatabase()
 {
-    QMessageBox::information(this, tr("Додати"),
-                             tr("Діалог додавання БД ще не реалізований"));
+
+    EditDatabaseDialog dlg(this);
+
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
+    const auto info = dlg.data();
+
+    if (info.name.trimmed().isEmpty()) {
+        QMessageBox::warning(this, tr("Помилка"),
+                             tr("Назва підключення не може бути порожньою"));
+        return;
+    }
+
+    QList<QStandardItem*> row;
+    row << new QStandardItem(info.name    );
+    row << new QStandardItem(info.host    );
+    row << new QStandardItem(QString::number(info.port));
+    row << new QStandardItem(info.database);
+    row << new QStandardItem(info.user    );
+    row << new QStandardItem(info.password);
+
+    m_model->appendRow(row);
+    saveConnections();
 }
 
 void SelectDatabaseDialog::editDatabase()
 {
-    QMessageBox::information(this, tr("Редагувати"),
-                             tr("Діалог редагування БД ще не реалізований"));
+
+    QModelIndex index = ui->tableViewDatabases->currentIndex();
+    if (!index.isValid()) {
+        QMessageBox::warning(
+            this,
+            tr("Редагування підключення"),
+            tr("Будь ласка, виберіть підключення зі списку.")
+            );
+        return;
+    }
+
+    const int row = index.row();
+    QStandardItem* item = m_model->item(row, 0);
+    if (!item) {
+        return;
+    }
+
+    // 1. Дістаємо DatabaseConnectionInfo з моделі
+    SC::Core::DB::DatabaseConnectionInfo info;
+    info.name     = m_model->item(row, 0)->text();
+    info.host     = m_model->item(row, 1)->text();
+    info.port     = m_model->item(row, 2)->text().toInt(); // Конвертуємо назад у число
+    info.database = m_model->item(row, 3)->text();
+    info.user     = m_model->item(row, 4)->text();
+    info.password = m_model->item(row, 5)->text();
+
+    // 2. Діалог редагування
+    EditDatabaseDialog dlg(info, this);
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
+    // 3. Отримуємо оновлені дані
+    const auto updatedInfo = dlg.data();
+
+    if (updatedInfo.name.trimmed().isEmpty()) {
+        QMessageBox::warning(this, tr("Помилка"),
+                             tr("Назва підключення не може бути порожньою"));
+        return;
+    }
+
+    // 4. Оновлюємо текст у кожній клітинці поточного рядка
+    m_model->item(row, 0)->setText(updatedInfo.name);
+    m_model->item(row, 1)->setText(updatedInfo.host);
+    m_model->item(row, 2)->setText(QString::number(updatedInfo.port));
+    m_model->item(row, 3)->setText(updatedInfo.database);
+    m_model->item(row, 4)->setText(updatedInfo.user);
+    m_model->item(row, 5)->setText(updatedInfo.password);
+
+    // 5. ВАЖЛИВО: Оновлюємо дані в UserRole, щоб при наступному натисканні
+    // "Редагувати" діалог отримав свіжі дані, а не старі
+    m_model->item(row, 0)->setData(QVariant::fromValue(updatedInfo), Qt::UserRole);
+
+    // 6. UX: залишаємо виділення
+    ui->tableViewDatabases->setCurrentIndex(
+        m_model->index(row, 0)
+        );
+
+    // 7. Після оновлення моделі зазвичай потрібно зберегти зміни у QSettings
+    saveConnections();
 }
 
 void SelectDatabaseDialog::removeDatabase()
@@ -120,11 +201,12 @@ void SelectDatabaseDialog::setupModel()
 {
     m_model->setColumnCount(5);
     m_model->setHorizontalHeaderLabels({
-        tr("Назва"),
-        tr("Host"),
-        tr("Port"),
-        tr("База"),
-        tr("Користувач")
+        tr("Назва"     ),
+        tr("Host"      ),
+        tr("Port"      ),
+        tr("База"      ),
+        tr("Користувач"),
+        tr("Пароль"    )
     });
 }
 
@@ -139,11 +221,12 @@ void SelectDatabaseDialog::loadConnections()
 
         // Створюємо список елементів для одного рядка
         QList<QStandardItem*> row {
-            new QStandardItem(settings.value("name").toString()),
-            new QStandardItem(settings.value("host").toString()),
-            new QStandardItem(settings.value("port").toString()),
+            new QStandardItem(settings.value("name"    ).toString()),
+            new QStandardItem(settings.value("host"    ).toString()),
+            new QStandardItem(settings.value("port"    ).toString()),
             new QStandardItem(settings.value("database").toString()),
-            new QStandardItem(settings.value("user").toString())
+            new QStandardItem(settings.value("user"    ).toString()),
+            new QStandardItem(settings.value("password").toString())
         };
 
         m_model->appendRow(row); // Тепер модель відповідає за пам'ять
@@ -163,6 +246,7 @@ void SelectDatabaseDialog::saveConnections()
         settings.setValue("port",     m_model->item(row, 2)->text());
         settings.setValue("database", m_model->item(row, 3)->text());
         settings.setValue("user",     m_model->item(row, 4)->text());
+        settings.setValue("password", m_model->item(row, 5)->text());
     }
 
     settings.endArray();

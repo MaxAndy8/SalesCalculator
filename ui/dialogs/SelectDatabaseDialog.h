@@ -2,6 +2,7 @@
 
 #include <QDialog>
 #include <QStandardItemModel>
+#include "core/db/DatabaseConnectionInfo.h"
 
 namespace Ui {
 class SelectDatabaseDialog;
@@ -9,13 +10,6 @@ class SelectDatabaseDialog;
 
 namespace SC::UI::Dialogs {
 
-struct DatabaseConnectionInfo {
-    QString name;
-    QString host;
-    int     port;
-    QString database;
-    QString user;
-};
 
 class SelectDatabaseDialog final : public QDialog
 {
@@ -25,7 +19,7 @@ public:
     explicit SelectDatabaseDialog(QWidget *parent = nullptr);
     ~SelectDatabaseDialog();
 
-    DatabaseConnectionInfo selectedDatabase() const;
+    SC::Core::DB::DatabaseConnectionInfo selectedDatabase() const;
 
 private slots:
     void addDatabase();

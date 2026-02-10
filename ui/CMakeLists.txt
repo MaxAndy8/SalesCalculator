@@ -19,6 +19,11 @@ set(UI_SOURCES
     dialogs/SelectDatabaseDialog.h
     dialogs/SelectDatabaseDialog.ui
 
+    # EditDatabaseDialog
+    dialogs/EditDatabaseDialog.cpp
+    dialogs/EditDatabaseDialog.h
+    dialogs/EditDatabaseDialog.ui
+
     # # dialogs/authdialog.cpp
     # # dialogs/authdialog.h
     # # dialogs/authdialog.ui
@@ -42,7 +47,7 @@ set(UI_SOURCES
 )
 
 add_executable(SalesCalculator
-    ${UI_SOURCES}
+    ${UI_SOURCES}    
 )
 
 # -------------------------------------
@@ -55,15 +60,16 @@ target_link_libraries(SalesCalculator
         Qt6::Sql
 )
 
-# # # -------------------------------------
-# # # Internal dependencies
-# # # -------------------------------------
-# # target_link_libraries(SalesCalculator
-# #     PRIVATE
-# #         sc_application
-# #         sc_domain
-# #         sc_infrastructure
-# # )
+# -------------------------------------
+# Internal dependencies
+# -------------------------------------
+target_link_libraries(SalesCalculator
+     PRIVATE
+        sc_core
+    # # sc_application
+    # # sc_domain
+    # # sc_infrastructure
+)
 
 # -------------------------------------
 # Include paths
