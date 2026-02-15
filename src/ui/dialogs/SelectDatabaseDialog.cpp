@@ -59,9 +59,9 @@ SelectDatabaseDialog::~SelectDatabaseDialog()
  *  Public
  * ========================= */
 
-SC::Core::DB::DatabaseConnectionInfo SelectDatabaseDialog::selectedDatabase() const
+SC::Application::Database::DatabaseConnectionInfo SelectDatabaseDialog::selectedDatabase() const
 {
-    SC::Core::DB::DatabaseConnectionInfo info;
+    SC::Application::Database::DatabaseConnectionInfo info;
 
     if (m_selectedRow < 0)
         return info;
@@ -127,7 +127,7 @@ void SelectDatabaseDialog::editDatabase()
     }
 
     // 1. Дістаємо DatabaseConnectionInfo з моделі
-    SC::Core::DB::DatabaseConnectionInfo info;
+    SC::Application::Database::DatabaseConnectionInfo info;
     info.name     = m_model->item(row, 0)->text();
     info.host     = m_model->item(row, 1)->text();
     info.port     = m_model->item(row, 2)->text().toInt(); // Конвертуємо назад у число

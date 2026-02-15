@@ -12,13 +12,22 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Усі бібліотеки будуються як position-independent (важливо для shared libs)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+include(GNUInstallDirs)
+
+# ================================
+# Global options
+# ================================
+option(SC_ENABLE_TESTS "Enable tests" OFF)
 
 # ================================
 # Qt
 # ================================
 set(QT_MIN_VERSION 6.5)
 
+# Основні Qt компоненти
 find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS
     Core
     Widgets
@@ -26,66 +35,81 @@ find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS
     LinguistTools
 )
 
-# Enable Qt auto features
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
+# ================================
+# Qt Auto Features
+# ================================
+set(CMAKE_AUTOMOC ON)    # MOC (signals/slots)
+set(CMAKE_AUTOUIC ON)    # Обробка .ui файлів
+set(CMAKE_AUTORCC ON)    # Обробка .qrc ресурсів
 
 # ================================
-# Global options
-# ================================
-option(SC_ENABLE_LOGGING "Enable logging" ON)
-option(SC_ENABLE_TRANSLATIONS "Enable translations" ON)
-option(SC_ENABLE_TESTS "Enable tests" OFF)
-
-# # # ================================
-# # # Project-wide include paths
-# # # ================================
-# # include_directories(
-# #     ${CMAKE_SOURCE_DIR}
-# # )
-
-# ================================
-# Subprojects (layers)
+# Project structure (Clean Architecture)
 # ================================
 
-add_subdirectory(core)
-# # add_subdirectory(infrastructure)
-add_subdirectory(ui)
+# ==============================
+# 🔵 Domain layer (Enterprise Business Rules)
+# - Чиста бізнес-логіка
+# - Не залежить ні від чого
+# ==============================
+add_subdirectory(src/domain)
 
-# # # ================================
-# # # Resources
-# # # ================================
-# # add_subdirectory(resources)
+# ==============================
+# 🟢 Application layer (Use Cases)
+# - Оркестрація бізнес-логіки
+# - Залежить від domain
+# ==============================
+add_subdirectory(src/application)
 
-# # # ================================
-# # # Translations
-# # # ================================
-# # if (SC_ENABLE_TRANSLATIONS)
-# #     add_subdirectory(i18n)
-# # endif()
+# ==============================
+# 🟠 Infrastructure layer (Frameworks & Drivers)
+# - БД, файлові системи, мережа
+# - Реалізації репозиторіїв
+# - Залежить від domain
+# ==============================
+add_subdirectory(src/infrastructure)
 
-# # # ================================
-# # # Tests
-# # # ================================
-# # if (SC_ENABLE_TESTS)
-# #     enable_testing()
-# #     add_subdirectory(tests)
-# # endif()
+# ==============================
+# 🟣 Core / Shared kernel
+# - Загальні утиліти
+# - Logger, AppContext, helpers
+# - Може залежати від domain
+# ==============================
+add_subdirectory(src/core)
 
-# # # ================================
-# # # Install (future)
-# # # ================================
-# # install(TARGETS SalesCalculator
-# #     RUNTIME DESTINATION bin
-# # )
+# ==============================
+# 🟡 UI Resources (Presentation support)
+# - Qt .qrc
+# - Іконки, стилі, картинки
+# - Належить до Presentation layer
+# ==============================
+add_subdirectory(src/ui_resources)
 
+# ==============================
+# 🟡 UI i18n (Presentation support)
+# - .ts / .qm переклади
+# - Належить до Presentation layer
+# ==============================
+add_subdirectory(src/ui_i18n)
 
+# ==============================
+# 🔷 UI layer (Presentation)
+# - Вікна, діалоги, віджети
+# - Залежить від application + core
+# ==============================
+add_subdirectory(src/ui)
 
+# ==============================
+# 🔴 Composition Root / App layer
+# - main()
+# - Збирання всіх залежностей
+# - Створення runtime
+# ==============================
+add_subdirectory(src/app)
 
-
-
-
-
-
-
+# ================================
+# Tests (optional)
+# ================================
+if (SC_ENABLE_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()

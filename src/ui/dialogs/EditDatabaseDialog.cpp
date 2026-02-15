@@ -15,7 +15,7 @@ EditDatabaseDialog::EditDatabaseDialog(QWidget *parent)
     connect(ui->btnOK    , &QPushButton::clicked, this, &QDialog::accept);
 }
 
-EditDatabaseDialog::EditDatabaseDialog(Core::DB::DatabaseConnectionInfo info, QWidget *parent)
+EditDatabaseDialog::EditDatabaseDialog(SC::Application::Database::DatabaseConnectionInfo info, QWidget *parent)
     : EditDatabaseDialog(parent) // Викликаємо перший конструктор
 {
     setData(info);
@@ -26,7 +26,7 @@ EditDatabaseDialog::~EditDatabaseDialog()
     delete ui;
 }
 
-void EditDatabaseDialog::setData(const SC::Core::DB::DatabaseConnectionInfo &info)
+void EditDatabaseDialog::setData(const SC::Application::Database::DatabaseConnectionInfo &info)
 {
     ui->editName->setText(    info.name    );
     ui->editHost->setText(    info.host    );
@@ -36,9 +36,9 @@ void EditDatabaseDialog::setData(const SC::Core::DB::DatabaseConnectionInfo &inf
     ui->editPassword->setText(info.password);
 }
 
-SC::Core::DB::DatabaseConnectionInfo EditDatabaseDialog::data() const
+SC::Application::Database::DatabaseConnectionInfo EditDatabaseDialog::data() const
 {
-    SC::Core::DB::DatabaseConnectionInfo info;
+    SC::Application::Database::DatabaseConnectionInfo info;
     info.name     = ui->editName->text()    ;
     info.host     = ui->editHost->text()    ;
     info.port     = ui->spinPort->value()   ;
@@ -47,5 +47,6 @@ SC::Core::DB::DatabaseConnectionInfo EditDatabaseDialog::data() const
     info.password = ui->editPassword->text();
     return info;
 }
+
 
 } // namespace SC::UI::Dialogs
