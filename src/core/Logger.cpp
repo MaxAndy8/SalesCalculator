@@ -33,6 +33,9 @@ static void write(const QString& level, const QString& message)
 {
     QMutexLocker locker(&g_mutex);
 
+    if (!g_logFile.isOpen())
+        return;
+
     QTextStream out(&g_logFile);
     out << QDateTime::currentDateTime().toString(Qt::ISODate)
         << " [" << level << "] "

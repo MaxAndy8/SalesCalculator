@@ -6,6 +6,8 @@ set(SC_APP_TARGET sc_app)
 
 add_executable(${SC_APP_TARGET}
     main.cpp
+    ApplicationBootstrapper.cpp
+    ApplicationBootstrapper.h
 )
 
 target_link_libraries(${SC_APP_TARGET}

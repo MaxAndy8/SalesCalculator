@@ -10,6 +10,8 @@ set(SC_APPLICATION_TARGET sc_application)
 
 set(SC_APPLICATION_SOURCES
     database/DatabaseConnectionInfo.h
+    auth/AuthenticatedUser.h
+    auth/AuthenticatedUser.cpp
 )
 
 add_library(${SC_APPLICATION_TARGET}

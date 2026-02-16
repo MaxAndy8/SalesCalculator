@@ -5,6 +5,13 @@
 namespace SC::Core
 {
 
+/**
+ * @brief використання паттерну RAII (Resource Acquisition Is Initialization)
+ *
+ * Створіть спеціальний клас-обгортку, який буде викликати initialize()
+ * у конструкторі та shutdown() у деструкторі.
+ */
+
 class Logger final
 {
 public:

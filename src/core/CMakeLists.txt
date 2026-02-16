@@ -12,6 +12,8 @@ set(SC_CORE_SOURCES
     Logger.cpp
     Logger.h
 
+    LoggerGuard.h
+
     # # AppContext.cpp
     # # AppContext.h
 )

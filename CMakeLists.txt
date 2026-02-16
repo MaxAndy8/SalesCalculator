@@ -43,8 +43,23 @@ set(CMAKE_AUTOUIC ON)    # Обробка .ui файлів
 set(CMAKE_AUTORCC ON)    # Обробка .qrc ресурсів
 
 # ================================
-# Project structure (Clean Architecture)
+# Project structure
 # ================================
+
+# ================================
+# Clean Architecture:
+#   Presentation
+#   Infrastructure
+#   Application
+#   Domain
+# ================================
+
+# ================================
+# More layer:
+#   Shared Kernel (Core) - Спільне ядро (технічний модуль) — окремо, не частина Clean шарів
+#   app = composition root - додаток = корінь композиції
+# ================================
+
 
 # ==============================
 # 🔵 Domain layer (Enterprise Business Rules)

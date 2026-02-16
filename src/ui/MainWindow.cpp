@@ -6,11 +6,16 @@
 namespace SC::UI
 {
 
-MainWindow::MainWindow(QWidget* parent)
+MainWindow::MainWindow(const SC::Application::Auth::AuthenticatedUser& user, QWidget* parent)
     : QMainWindow(parent),
-      m_ui(std::make_unique<Ui::MainWindow>())
+      m_ui(std::make_unique<Ui::MainWindow>()),
+      m_user(user)
 {
     setupUi();
+
+    // можна одразу застосувати ролі
+    // setupUi();
+    // applyPermissions(m_user);
 }
 
 MainWindow::~MainWindow() = default;
