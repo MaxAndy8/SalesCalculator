@@ -8,6 +8,8 @@ set(SC_INFRASTRUCTURE_SOURCES
     db/UnitOfWork.cpp
     db/DbProviderGuard.h
     db/DbProviderGuard.cpp
+    auth/SqlAuthService.h
+    auth/SqlAuthService.cpp
 )
 
 add_library(${SC_INFRASTRUCTURE_TARGET}
@@ -18,8 +20,8 @@ add_library(${SC_INFRASTRUCTURE_TARGET}
 target_link_libraries(${SC_INFRASTRUCTURE_TARGET}
     PUBLIC
         Qt6::Sql
-        # # Qt6::Core
-        # # sc_domain
+        Qt6::Core
+        sc_application
 )
 
 target_include_directories(${SC_INFRASTRUCTURE_TARGET}

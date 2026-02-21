@@ -27,10 +27,10 @@ public:
     bool isAdmin() const noexcept;
 
 private:
-    QUuid      m_id;
-    QString    m_username;
-    QString    m_displayName;
-    QStringList m_roles;
+    QUuid       m_id         ;
+    QString     m_username   ;
+    QString     m_displayName;
+    QStringList m_roles      ;
 };
 
 } // namespace SC::Application::Auth

@@ -7,9 +7,11 @@
 
 #include "ui/application/ScApplication.h"
 #include "ui/dialogs/SelectDatabaseDialog.h"
+#include "ui/dialogs/AuthDialog.h"
 #include "ui/MainWindow.h"
 
 #include "infrastructure/db/DbProviderGuard.h"
+#include "infrastructure/auth/SqlAuthService.h"
 
 namespace SC::App
 {
@@ -40,7 +42,7 @@ int ApplicationBootstrapper::run()
             return EXIT_SUCCESS;
 
         auto dbInfo = dbDialog.selectedDatabase();
-/*
+
         // ==============================
         // 3. Infrastructure lifecycle
         // ==============================
@@ -49,19 +51,19 @@ int ApplicationBootstrapper::run()
         // ==============================
         // 4. Authorization
         // ==============================
-        SC::UI::Dialogs::AuthDialog authDialog;
+        SC::Infrastructure::Auth::SqlAuthService authService;
+        SC::UI::Dialogs::AuthDialog authDialog(&authService);
 
         if (authDialog.exec() != QDialog::Accepted)
             return EXIT_SUCCESS;
 
         auto user = authDialog.authenticatedUser();
-
         // ==============================
         // 5. MainWindow
         // ==============================
         SC::UI::MainWindow mainWindow(user);
         mainWindow.show();
-*/
+
         return app.exec();
     }
     catch (const std::exception& ex)

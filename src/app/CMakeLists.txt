@@ -17,7 +17,7 @@ target_link_libraries(${SC_APP_TARGET}
 
         # # sc_domain
         # # sc_application
-        # # sc_infrastructure
+        sc_infrastructure
         sc_core
         sc_ui
         # # sc_ui_resources

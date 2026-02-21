@@ -22,8 +22,9 @@ set(SC_UI_SOURCES
     dialogs/EditDatabaseDialog.h
     dialogs/EditDatabaseDialog.ui
 
-    # # dialogs/AuthDialog.cpp
-    # # dialogs/AuthDialog.h
+    dialogs/AuthDialog.cpp
+    dialogs/AuthDialog.h
+    dialogs/AuthDialog.ui
 )
 
 add_library(${SC_UI_TARGET}
@@ -35,7 +36,7 @@ target_link_libraries(${SC_UI_TARGET}
         Qt6::Core
         Qt6::Widgets
 
-        # # sc_application
+        sc_application
         sc_core
 
         # # sc_ui_resources

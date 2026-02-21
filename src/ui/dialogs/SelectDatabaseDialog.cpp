@@ -71,6 +71,7 @@ SC::Application::Database::DatabaseConnectionInfo SelectDatabaseDialog::selected
     info.port     = m_model->item(m_selectedRow, 2)->text().toInt();
     info.database = m_model->item(m_selectedRow, 3)->text();
     info.user     = m_model->item(m_selectedRow, 4)->text();
+    info.password = m_model->item(m_selectedRow, 5)->text();
 
     return info;
 }
@@ -199,7 +200,7 @@ void SelectDatabaseDialog::selectDatabase()
 
 void SelectDatabaseDialog::setupModel()
 {
-    m_model->setColumnCount(5);
+    m_model->setColumnCount(6);
     m_model->setHorizontalHeaderLabels({
         tr("Назва"     ),
         tr("Host"      ),
