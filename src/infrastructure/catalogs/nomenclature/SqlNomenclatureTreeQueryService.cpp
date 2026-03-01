@@ -32,13 +32,14 @@ QString baseSelectSql()
     return QStringLiteral(
         "SELECT n.idrref, "
         "       n.parent_idrref, "
-        "       n.is_group, "
+        "       n.folder, "
         "       n.code, "
         "       n.description, "
         "       EXISTS ("
         "           SELECT 1 "
         "           FROM nomenclature child "
-        "           WHERE child.parent_idrref = n.idrref"
+        "           WHERE child.parent_idrref = n.idrref "
+        "             AND child.idrref <> n.idrref"
         "       ) AS has_children "
         "FROM nomenclature n ");
 }
@@ -60,9 +61,9 @@ void appendCursorPredicate(QString& sql, const std::optional<Cursor>& cursor)
 
     sql += QStringLiteral(
         " AND ("
-        "    (n.is_group = :cursor_is_group AND (n.code > :cursor_code OR (n.code = :cursor_code AND n.idrref > :cursor_id)))"
+        "    (n.folder = :cursor_is_group AND (n.code > :cursor_code OR (n.code = :cursor_code AND n.idrref > :cursor_id)))"
         "    OR "
-        "    (n.is_group = false AND :cursor_is_group = true)"
+        "    (n.folder = false AND :cursor_is_group = true)"
         " ) ");
 }
 
@@ -79,13 +80,17 @@ Page executePagedQuery(
 
     QString sql = baseSelectSql();
     if (parentId.has_value())
-        sql += QStringLiteral("WHERE n.parent_idrref = :parent_id ");
+        sql += QStringLiteral(
+            "WHERE n.parent_idrref = :parent_id "
+            "  AND n.idrref <> :parent_id ");
     else
-        sql += QStringLiteral("WHERE n.parent_idrref IS NULL ");
+        sql += QStringLiteral(
+            "WHERE n.parent_idrref IS NULL "
+            "   OR n.parent_idrref = n.idrref ");
 
     appendCursorPredicate(sql, cursor);
     sql += QStringLiteral(
-        "ORDER BY n.is_group DESC, n.code ASC, n.idrref ASC "
+        "ORDER BY n.folder DESC, n.code ASC, n.idrref ASC "
         "LIMIT :limit");
 
     query.prepare(sql);
