@@ -9,6 +9,7 @@
 #include "ui/dialogs/SelectDatabaseDialog.h"
 #include "ui/dialogs/AuthDialog.h"
 #include "ui/MainWindow.h"
+#include "FormControllerImpl.h"
 
 #include "infrastructure/db/DbProviderGuard.h"
 #include "infrastructure/auth/SqlAuthService.h"
@@ -59,9 +60,10 @@ int ApplicationBootstrapper::run()
 
         auto user = authDialog.authenticatedUser();
         // ==============================
-        // 5. MainWindow
+        // 5. Form controller + MainWindow
         // ==============================
-        SC::UI::MainWindow mainWindow(user);
+        SC::App::FormControllerImpl formController(user);
+        SC::UI::MainWindow mainWindow(user, &formController);
         mainWindow.show();
 
         return app.exec();

@@ -8,6 +8,8 @@ add_executable(${SC_APP_TARGET}
     main.cpp
     ApplicationBootstrapper.cpp
     ApplicationBootstrapper.h
+    FormControllerImpl.cpp
+    FormControllerImpl.h
 )
 
 target_link_libraries(${SC_APP_TARGET}
@@ -16,7 +18,7 @@ target_link_libraries(${SC_APP_TARGET}
         Qt6::Widgets
 
         # # sc_domain
-        # # sc_application
+        sc_application
         sc_infrastructure
         sc_core
         sc_ui

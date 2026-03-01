@@ -1,6 +1,6 @@
 #pragma once
 
-#include "formController/IFormController.h"
+#include "ui/formController/IFormController.h"
 #include <QModelIndex>
 #include <QMainWindow>
 #include "application/auth/AuthenticatedUser.h"
@@ -19,7 +19,9 @@ class MainWindow final : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(const SC::Application::Auth::AuthenticatedUser& user, QWidget* parent = nullptr);
+    explicit MainWindow(const SC::Application::Auth::AuthenticatedUser& user,
+                        IFormController* formController,
+                        QWidget* parent = nullptr);
     ~MainWindow() override;
 
     MainWindow(const MainWindow&) = delete;
@@ -53,6 +55,7 @@ private slots:
 
     // //////////////////////////////////////////////////////////////
     void on_actionCatalogsNomenclatureListForm_triggered();
+    void on_actionCatalogsUnitsListForm_triggered();
 };
 
 } // namespace SC::UI

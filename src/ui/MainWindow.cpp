@@ -8,10 +8,13 @@
 namespace SC::UI
 {
 
-MainWindow::MainWindow(const SC::Application::Auth::AuthenticatedUser& user, QWidget* parent)
+MainWindow::MainWindow(const SC::Application::Auth::AuthenticatedUser& user,
+                       IFormController* formController,
+                       QWidget* parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      m_user(user)
+      m_user(user),
+      formController(formController)
 {
     setupUi();
 
@@ -125,11 +128,20 @@ void MainWindow::on_actionPreviousWindow_triggered()
 
 void MainWindow::on_actionCatalogsNomenclatureListForm_triggered()
 {
+    QString  idWindow    = "CatalogNomenclatureListForm";
+    FormType formType    = FormType::Catalog_Nomenclature_ListForm;
+    QString  windowTitle = tr("Catalog nomenclature");
+    openWindowForm(idWindow, formType, windowTitle);
+}
+
+void MainWindow::on_actionCatalogsUnitsListForm_triggered()
+{
     QString  idWindow    = "CatalogsUsersListForm";
     FormType formType    = FormType::Catalog_Users_ListForm;
     QString  windowTitle = tr("Catalogs users");
     openWindowForm(idWindow, formType, windowTitle);
 }
+
 
 
 } // namespace SC::UI
