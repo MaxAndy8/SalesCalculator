@@ -6,6 +6,15 @@
 #include <QUuid>
 #include <QDebug>
 
+namespace
+{
+QString& currentThreadConnectionName()
+{
+    thread_local QString connectionName;
+    return connectionName;
+}
+} // namespace
+
 namespace SC::Infrastructure::DB
 {
 
@@ -22,7 +31,7 @@ void DbConnectionProvider::initialize(const SC::Application::Database::DatabaseC
 
 QSqlDatabase DbConnectionProvider::current()
 {
-    thread_local QString connectionName;
+    QString& connectionName = currentThreadConnectionName();
 
     if (connectionName.isEmpty())
     {
@@ -68,17 +77,19 @@ QSqlDatabase DbConnectionProvider::createConnection(const QString& name)
 
 void DbConnectionProvider::closeCurrentThreadConnection()
 {
-    thread_local QString connectionName;
+    QString& connectionName = currentThreadConnectionName();
 
     if (!connectionName.isEmpty())
     {
-        QSqlDatabase db =
-            QSqlDatabase::database(connectionName);
+        const QString name = connectionName;
 
-        if (db.isOpen())
-            db.close();
+        {
+            QSqlDatabase db = QSqlDatabase::database(name);
+            if (db.isOpen())
+                db.close();
+        }
 
-        QSqlDatabase::removeDatabase(connectionName);
+        QSqlDatabase::removeDatabase(name);
         connectionName.clear();
     }
 }
@@ -91,9 +102,11 @@ void DbConnectionProvider::shutdown()
 
     for (const auto& name : connections)
     {
-        QSqlDatabase db = QSqlDatabase::database(name);
-        if (db.isOpen())
-            db.close();
+        {
+            QSqlDatabase db = QSqlDatabase::database(name);
+            if (db.isOpen())
+                db.close();
+        }
 
         QSqlDatabase::removeDatabase(name);
     }

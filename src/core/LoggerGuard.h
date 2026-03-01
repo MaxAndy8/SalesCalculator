@@ -4,9 +4,9 @@
 namespace SC::Core
 {
 
-
-
-
+// Use LoggerGuard only in non-Qt entrypoints (CLI/tests/tools) where
+// SC::UI::Application::ScApplication is not created and logger lifecycle
+// must still be managed via RAII.
 class LoggerGuard final
 {
 public:

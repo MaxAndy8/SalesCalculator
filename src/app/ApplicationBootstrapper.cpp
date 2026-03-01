@@ -3,8 +3,6 @@
 #include <QDialog>
 #include <QMessageBox>
 
-#include "core/LoggerGuard.h"
-
 #include "ui/application/ScApplication.h"
 #include "ui/dialogs/SelectDatabaseDialog.h"
 #include "ui/dialogs/AuthDialog.h"
@@ -27,17 +25,12 @@ ApplicationBootstrapper::ApplicationBootstrapper(int argc, char* argv[])
 
 int ApplicationBootstrapper::run()
 {
-    // ==============================
-    // 1. Logger lifecycle
-    // ==============================
-    SC::Core::LoggerGuard loggerGuard;
-
     SC::UI::Application::ScApplication app(m_argc, m_argv);
 
     try
     {
         // ==============================
-        // 2. Database selection
+        // 1. Database selection
         // ==============================
         SC::UI::Dialogs::SelectDatabaseDialog dbDialog;
 
@@ -47,12 +40,12 @@ int ApplicationBootstrapper::run()
         auto dbInfo = dbDialog.selectedDatabase();
 
         // ==============================
-        // 3. Infrastructure lifecycle
+        // 2. Infrastructure lifecycle
         // ==============================
         SC::Infrastructure::DB::DbProviderGuard dbGuard(dbInfo);
 
         // ==============================
-        // 4. Authorization
+        // 3. Authorization
         // ==============================
         SC::Infrastructure::Auth::SqlAuthService authService;
         SC::UI::Dialogs::AuthDialog authDialog(&authService);
@@ -62,7 +55,7 @@ int ApplicationBootstrapper::run()
 
         auto user = authDialog.authenticatedUser();
         // ==============================
-        // 5. Form controller + MainWindow
+        // 4. Form controller + MainWindow
         // ==============================
         SC::App::FormControllerImpl formController(user);
 
