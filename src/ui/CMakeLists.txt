@@ -11,6 +11,9 @@ set(SC_UI_SOURCES
     MainWindow.h
     MainWindow.ui
 
+    formController/FormType.h
+    formController/IFormController.h
+
     application/ScApplication.cpp
     application/ScApplication.h
 

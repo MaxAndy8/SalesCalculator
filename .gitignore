@@ -81,3 +81,8 @@ CMakeLists.txt.user*
 .uic/
 /build*/
 /else/
+/.vs/
+/out/
+
+
+
