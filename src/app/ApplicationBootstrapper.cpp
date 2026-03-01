@@ -66,7 +66,9 @@ int ApplicationBootstrapper::run()
         // ==============================
         SC::App::FormControllerImpl formController(user);
 
-        formController.addSqlTreeQueryService(new SC::Infrastructure::Catalogs::Nomenclature::SqlNomenclatureTreeQueryService());   // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Nomenclature_ListForm)
+        formController.addSqlTreeQueryService(
+            new SC::Infrastructure::Catalogs::Nomenclature::SqlNomenclatureTreeQueryService()); // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Nomenclature_ListForm)
+
         //formController.addSqlTreeQueryService(new SC::Infrastructure::Catalogs::Users::SqlUsersTreeQueryService());                 // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Users_ListForm)
         //formController.addSqlTreeQueryService(new SC::Infrastructure::Catalogs::Units::SqlUnitsTreeQueryService());                 // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Units_ListForm)
         //formController.addSqlTreeQueryService(new SC::Infrastructure::Document::GoodsReceipt::SqlGoodsReceiptTreeQueryService());   // для FormControllerImpl::getForm(SC::UI::FormType::Document_GoodsReceipt_ListForm)

@@ -16,32 +16,14 @@ FormControllerImpl::FormControllerImpl(const SC::Application::Auth::Authenticate
 {
 }
 
-FormControllerImpl::~FormControllerImpl()
-{
-    for (auto& [_, service] : m_queryServices)
-    {
-        delete service;
-        service = nullptr;
-    }
-    m_queryServices.clear();
-}
-
 void FormControllerImpl::addSqlTreeQueryService(
     SC::Application::ITreeQueryService* queryService)
 {
     if (queryService == nullptr)
         return;
 
-    const auto key = queryService->formType();
-    auto it = m_queryServices.find(key);
-    if (it != m_queryServices.end())
-    {
-        delete it->second;
-        it->second = queryService;
-        return;
-    }
-
-    m_queryServices.emplace(key, queryService);
+    const auto formType = queryService->formType();
+    m_queryServices[formType] = std::unique_ptr<SC::Application::ITreeQueryService>(queryService);
 }
 
 QWidget* FormControllerImpl::getForm(SC::UI::FormType type)
@@ -54,7 +36,7 @@ QWidget* FormControllerImpl::getForm(SC::UI::FormType type)
         if (it != m_queryServices.end() && it->second != nullptr)
         {
             auto* nomenclatureService =
-                dynamic_cast<SC::Application::Catalogs::Nomenclature::INomenclatureTreeQueryService*>(it->second);
+                dynamic_cast<SC::Application::Catalogs::Nomenclature::INomenclatureTreeQueryService*>(it->second.get());
             if (nomenclatureService != nullptr)
                 return new SC::UI::Forms::Catalogs::Nomenclature::NomenclatureListForm(nomenclatureService);
         }

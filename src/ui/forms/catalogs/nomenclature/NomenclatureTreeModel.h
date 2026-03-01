@@ -34,6 +34,9 @@ public:
     bool canFetchMore(const QModelIndex& parent) const override;
     void fetchMore(const QModelIndex& parent) override;
 
+signals:
+    void fetchError(const QString& message);
+
 private:
     enum class LoadState
     {

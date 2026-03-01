@@ -215,6 +215,7 @@ void NomenclatureTreeModel::appendPage(const QModelIndex& parentIndex, TreeNode*
     catch (const std::exception& ex)
     {
         qWarning() << "NomenclatureTreeModel fetch error:" << ex.what();
+        emit fetchError(QString::fromUtf8(ex.what()));
         parentNode->loadState = LoadState::FullyLoaded;
         parentNode->nextCursor.reset();
         return;

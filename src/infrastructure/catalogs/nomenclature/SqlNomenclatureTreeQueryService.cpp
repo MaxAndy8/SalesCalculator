@@ -7,6 +7,7 @@
 #include <QtSql/QSqlQuery>
 
 #include <algorithm>
+#include <stdexcept>
 
 namespace SC::Infrastructure::Catalogs::Nomenclature
 {
@@ -106,9 +107,9 @@ Page executePagedQuery(
     Page page;
     if (!query.exec())
     {
-        qWarning() << "SqlNomenclatureTreeQueryService::executePagedQuery:"
-                   << query.lastError().text();
-        return page;
+        const QString error = query.lastError().text();
+        qWarning() << "SqlNomenclatureTreeQueryService::executePagedQuery:" << error;
+        throw std::runtime_error(error.toStdString());
     }
 
     while (query.next())
