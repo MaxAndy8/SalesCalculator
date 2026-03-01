@@ -11,6 +11,10 @@ set(SC_UI_SOURCES
     MainWindow.h
     MainWindow.ui
 
+    forms/base/ListForm.cpp
+    forms/base/ListForm.h
+    forms/base/ListForm.ui
+
     formController/FormType.h
     formController/IFormController.h
 
