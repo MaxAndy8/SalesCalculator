@@ -1,0 +1,263 @@
+<RCC>
+    <qresource prefix="/Change">
+        <file>icons/Change/tbglacti_old.bmp</file>
+        <file>icons/Change/h.png</file>
+        <file>icons/Change/l.png</file>
+        <file>icons/Change/m.png</file>
+        <file>icons/Change/tbglacti.png</file>
+        <file>icons/Change/tbglacti_85.png</file>
+        <file alias="p100">icons/Change/tbglacti_100.png</file>
+        <file>icons/Change/tbglacti_125.png</file>
+        <file>icons/Change/tbglacti_150.png</file>
+        <file>icons/Change/tbglacti_175.png</file>
+        <file>icons/Change/tbglacti_200.png</file>
+        <file>icons/Change/tbglacti_300.png</file>
+        <file>icons/Change/tbglacti_400.png</file>
+        <file>icons/Change/x.png</file>
+    </qresource>
+    <qresource prefix="/CloneListItem">
+        <file>icons/CloneListItem/tbglacti_old.bmp</file>
+        <file>icons/CloneListItem/h.png</file>
+        <file>icons/CloneListItem/l.png</file>
+        <file>icons/CloneListItem/m.png</file>
+        <file>icons/CloneListItem/tbglacti.png</file>
+        <file>icons/CloneListItem/tbglacti_85.png</file>
+        <file alias="p100">icons/CloneListItem/tbglacti_100.png</file>
+        <file>icons/CloneListItem/tbglacti_125.png</file>
+        <file>icons/CloneListItem/tbglacti_150.png</file>
+        <file>icons/CloneListItem/tbglacti_175.png</file>
+        <file>icons/CloneListItem/tbglacti_200.png</file>
+        <file>icons/CloneListItem/tbglacti_300.png</file>
+        <file>icons/CloneListItem/tbglacti_400.png</file>
+        <file>icons/CloneListItem/x.png</file>
+    </qresource>
+    <qresource prefix="/CreateFolder">
+        <file>icons/CreateFolder/h.png</file>
+        <file>icons/CreateFolder/l.png</file>
+        <file>icons/CreateFolder/m.png</file>
+        <file>icons/CreateFolder/tbreflist.png</file>
+        <file>icons/CreateFolder/tbreflist_85.png</file>
+        <file alias="p100">icons/CreateFolder/tbreflist_100.png</file>
+        <file>icons/CreateFolder/tbreflist_125.png</file>
+        <file>icons/CreateFolder/tbreflist_150.png</file>
+        <file>icons/CreateFolder/tbreflist_175.png</file>
+        <file>icons/CreateFolder/tbreflist_200.png</file>
+        <file>icons/CreateFolder/tbreflist_300.png</file>
+        <file>icons/CreateFolder/tbreflist_400.png</file>
+        <file>icons/CreateFolder/tbreflist_old.png</file>
+        <file>icons/CreateFolder/x.png</file>
+    </qresource>
+    <qresource prefix="/CreateListItem">
+        <file>icons/CreateListItem/tbglacti_old.bmp</file>
+        <file>icons/CreateListItem/h.png</file>
+        <file>icons/CreateListItem/l.png</file>
+        <file>icons/CreateListItem/m.png</file>
+        <file>icons/CreateListItem/tbglacti.png</file>
+        <file>icons/CreateListItem/tbglacti_85.png</file>
+        <file alias="p100">icons/CreateListItem/tbglacti_100.png</file>
+        <file>icons/CreateListItem/tbglacti_125.png</file>
+        <file>icons/CreateListItem/tbglacti_150.png</file>
+        <file>icons/CreateListItem/tbglacti_175.png</file>
+        <file>icons/CreateListItem/tbglacti_200.png</file>
+        <file>icons/CreateListItem/tbglacti_300.png</file>
+        <file>icons/CreateListItem/tbglacti_400.png</file>
+        <file>icons/CreateListItem/x.png</file>
+    </qresource>
+    <qresource prefix="/MarkToDelete">
+        <file>icons/MarkToDelete/h.png</file>
+        <file>icons/MarkToDelete/l.png</file>
+        <file>icons/MarkToDelete/m.png</file>
+        <file>icons/MarkToDelete/tbfrnt.png</file>
+        <file>icons/MarkToDelete/tbfrnt_85.png</file>
+        <file alias="p100">icons/MarkToDelete/tbfrnt_100.png</file>
+        <file>icons/MarkToDelete/tbfrnt_125.png</file>
+        <file>icons/MarkToDelete/tbfrnt_150.png</file>
+        <file>icons/MarkToDelete/tbfrnt_175.png</file>
+        <file>icons/MarkToDelete/tbfrnt_200.png</file>
+        <file>icons/MarkToDelete/tbfrnt_300.png</file>
+        <file>icons/MarkToDelete/tbfrnt_400.png</file>
+        <file>icons/MarkToDelete/tbfrnt_old.png</file>
+        <file>icons/MarkToDelete/x.png</file>
+    </qresource>
+    <qresource prefix="/OutputList">
+        <file>icons/OutputList/tbglacti_old.bmp</file>
+        <file>icons/OutputList/h.png</file>
+        <file>icons/OutputList/l.png</file>
+        <file>icons/OutputList/m.png</file>
+        <file>icons/OutputList/tbglacti.png</file>
+        <file>icons/OutputList/tbglacti_85.png</file>
+        <file alias="p100">icons/OutputList/tbglacti_100.png</file>
+        <file>icons/OutputList/tbglacti_125.png</file>
+        <file>icons/OutputList/tbglacti_150.png</file>
+        <file>icons/OutputList/tbglacti_175.png</file>
+        <file>icons/OutputList/tbglacti_200.png</file>
+        <file>icons/OutputList/tbglacti_300.png</file>
+        <file>icons/OutputList/tbglacti_400.png</file>
+        <file>icons/OutputList/x.png</file>
+    </qresource>
+    <qresource prefix="/Refresh">
+        <file>icons/Refresh/tbglacti_old.bmp</file>
+        <file>icons/Refresh/h.png</file>
+        <file>icons/Refresh/l.png</file>
+        <file>icons/Refresh/m.png</file>
+        <file>icons/Refresh/tbglacti.png</file>
+        <file>icons/Refresh/tbglacti_85.png</file>
+        <file alias="p100">icons/Refresh/tbglacti_100.png</file>
+        <file>icons/Refresh/tbglacti_125.png</file>
+        <file>icons/Refresh/tbglacti_150.png</file>
+        <file>icons/Refresh/tbglacti_175.png</file>
+        <file>icons/Refresh/tbglacti_200.png</file>
+        <file>icons/Refresh/tbglacti_300.png</file>
+        <file>icons/Refresh/tbglacti_400.png</file>
+        <file>icons/Refresh/x.png</file>
+    </qresource>
+    <qresource prefix="/CheckAll">
+        <file>icons/CheckAll/checked.png</file>
+        <file>icons/CheckAll/checked_85.png</file>
+        <file alias="p100">icons/CheckAll/checked_100.png</file>
+        <file>icons/CheckAll/checked_125.png</file>
+        <file>icons/CheckAll/checked_150.png</file>
+        <file>icons/CheckAll/checked_175.png</file>
+        <file>icons/CheckAll/checked_200.png</file>
+        <file>icons/CheckAll/checked_300.png</file>
+        <file>icons/CheckAll/checked_400.png</file>
+        <file>icons/CheckAll/checked_old.png</file>
+        <file>icons/CheckAll/h.png</file>
+        <file>icons/CheckAll/l.png</file>
+        <file>icons/CheckAll/m.png</file>
+        <file>icons/CheckAll/x.png</file>
+    </qresource>
+    <qresource prefix="/GrayedAll">
+        <file>icons/GrayedAll/discheck.png</file>
+        <file>icons/GrayedAll/discheck_85.png</file>
+        <file alias="p100">icons/GrayedAll/discheck_100.png</file>
+        <file>icons/GrayedAll/discheck_125.png</file>
+        <file>icons/GrayedAll/discheck_150.png</file>
+        <file>icons/GrayedAll/discheck_175.png</file>
+        <file>icons/GrayedAll/discheck_200.png</file>
+        <file>icons/GrayedAll/discheck_300.png</file>
+        <file>icons/GrayedAll/discheck_400.png</file>
+        <file>icons/GrayedAll/discheck_old.png</file>
+        <file>icons/GrayedAll/h.png</file>
+        <file>icons/GrayedAll/l.png</file>
+        <file>icons/GrayedAll/m.png</file>
+        <file>icons/GrayedAll/x.png</file>
+    </qresource>
+    <qresource prefix="/InputFieldSelect">
+        <file>icons/InputFieldSelect/edtButtons_85.png</file>
+        <file alias="p100">icons/InputFieldSelect/edtButtons_100.png</file>
+        <file>icons/InputFieldSelect/edtButtons_125.png</file>
+        <file>icons/InputFieldSelect/edtButtons_150.png</file>
+        <file>icons/InputFieldSelect/edtButtons_175.png</file>
+        <file>icons/InputFieldSelect/edtButtons_200.png</file>
+        <file>icons/InputFieldSelect/edtButtons_300.png</file>
+        <file>icons/InputFieldSelect/edtButtons_400.png</file>
+        <file>icons/InputFieldSelect/edtButtonsClassic.png</file>
+        <file>icons/InputFieldSelect/edtButtonsOld.png</file>
+    </qresource>
+    <qresource prefix="/InputFieldOpen">
+        <file>icons/InputFieldOpen/edtButtons_85.png</file>
+        <file alias="p100">icons/InputFieldOpen/edtButtons_100.png</file>
+        <file>icons/InputFieldOpen/edtButtons_125.png</file>
+        <file>icons/InputFieldOpen/edtButtons_150.png</file>
+        <file>icons/InputFieldOpen/edtButtons_175.png</file>
+        <file>icons/InputFieldOpen/edtButtons_200.png</file>
+        <file>icons/InputFieldOpen/edtButtons_300.png</file>
+        <file>icons/InputFieldOpen/edtButtons_400.png</file>
+        <file>icons/InputFieldOpen/edtButtonsClassic.png</file>
+        <file>icons/InputFieldOpen/edtButtonsOld.png</file>
+    </qresource>
+    <qresource prefix="/InputFieldClear">
+        <file>icons/InputFieldClear/edtButtons_85.png</file>
+        <file alias="p100">icons/InputFieldClear/edtButtons_100.png</file>
+        <file>icons/InputFieldClear/edtButtons_125.png</file>
+        <file>icons/InputFieldClear/edtButtons_150.png</file>
+        <file>icons/InputFieldClear/edtButtons_175.png</file>
+        <file>icons/InputFieldClear/edtButtons_200.png</file>
+        <file>icons/InputFieldClear/edtButtons_300.png</file>
+        <file>icons/InputFieldClear/edtButtons_400.png</file>
+        <file>icons/InputFieldClear/edtButtonsClassic.png</file>
+        <file>icons/InputFieldClear/edtButtonsOld.png</file>
+    </qresource>
+    <qresource prefix="/ForCatalogs">
+        <file alias="Folder16">icons/ForCatalogs/Folder16.png</file>
+        <file alias="FolderDeletionMark16">icons/ForCatalogs/FolderDeletionMark16.png</file>
+        <file alias="Item16">icons/ForCatalogs/Item16.png</file>
+        <file alias="ItemDeletionMark16">icons/ForCatalogs/ItemDeletionMark16.png</file>
+    </qresource>
+    <qresource prefix="/Catalog">
+        <file>icons/Catalog/h.png</file>
+        <file>icons/Catalog/l.png</file>
+        <file>icons/Catalog/m.png</file>
+        <file>icons/Catalog/TbBasicUIMD.png</file>
+        <file>icons/Catalog/TbBasicUIMD_85.png</file>
+        <file alias="p100">icons/Catalog/TbBasicUIMD_100.png</file>
+        <file>icons/Catalog/TbBasicUIMD_125.png</file>
+        <file>icons/Catalog/TbBasicUIMD_150.png</file>
+        <file>icons/Catalog/TbBasicUIMD_175.png</file>
+        <file>icons/Catalog/TbBasicUIMD_200.png</file>
+        <file>icons/Catalog/TbBasicUIMD_300.png</file>
+        <file>icons/Catalog/TbBasicUIMD_400.png</file>
+        <file>icons/Catalog/TbBasicUIMD_old.png</file>
+        <file>icons/Catalog/x.png</file>
+    </qresource>
+    <qresource prefix="/Open">
+        <file>icons/Open/open50.png</file>
+    </qresource>
+    <qresource prefix="/Document">
+        <file>icons/Document/BasicMDImages.png</file>
+        <file>icons/Document/BasicMDImages_85.png</file>
+        <file alias="p100">icons/Document/BasicMDImages_100.png</file>
+        <file>icons/Document/BasicMDImages_125.png</file>
+        <file>icons/Document/BasicMDImages_150.png</file>
+        <file>icons/Document/BasicMDImages_175.png</file>
+        <file>icons/Document/BasicMDImages_200.png</file>
+        <file>icons/Document/BasicMDImages_300.png</file>
+        <file>icons/Document/BasicMDImages_400.png</file>
+        <file>icons/Document/BasicMDImages_old.png</file>
+        <file>icons/Document/h.png</file>
+        <file>icons/Document/l.png</file>
+        <file>icons/Document/m.png</file>
+        <file>icons/Document/x.png</file>
+    </qresource>
+    <qresource prefix="/Constant">
+        <file>icons/Constant/h.png</file>
+        <file>icons/Constant/l.png</file>
+        <file>icons/Constant/m.png</file>
+        <file>icons/Constant/TbBasicUIMD.png</file>
+        <file>icons/Constant/TbBasicUIMD_85.png</file>
+        <file alias="p100">icons/Constant/TbBasicUIMD_100.png</file>
+        <file>icons/Constant/TbBasicUIMD_125.png</file>
+        <file>icons/Constant/TbBasicUIMD_150.png</file>
+        <file>icons/Constant/TbBasicUIMD_175.png</file>
+        <file>icons/Constant/TbBasicUIMD_200.png</file>
+        <file>icons/Constant/TbBasicUIMD_300.png</file>
+        <file>icons/Constant/TbBasicUIMD_400.png</file>
+        <file>icons/Constant/TbBasicUIMD_old.png</file>
+        <file>icons/Constant/x.png</file>
+    </qresource>
+    <qresource prefix="/ForDocuments">
+        <file alias="Doc16">icons/ForDocuments/Doc16.png</file>
+        <file alias="DocDeletionMark16">icons/ForDocuments/DocDeletionMark16.png</file>
+        <file alias="DocPosted16">icons/ForDocuments/DocPosted16.png</file>
+    </qresource>
+    <qresource prefix="/InformationRegister">
+        <file>icons/InformationRegister/BasicMDImages.png</file>
+        <file>icons/InformationRegister/BasicMDImages_85.png</file>
+        <file alias="p100">icons/InformationRegister/BasicMDImages_100.png</file>
+        <file>icons/InformationRegister/BasicMDImages_125.png</file>
+        <file>icons/InformationRegister/BasicMDImages_150.png</file>
+        <file>icons/InformationRegister/BasicMDImages_175.png</file>
+        <file>icons/InformationRegister/BasicMDImages_200.png</file>
+        <file>icons/InformationRegister/BasicMDImages_300.png</file>
+        <file>icons/InformationRegister/BasicMDImages_400.png</file>
+        <file>icons/InformationRegister/BasicMDImages_old.png</file>
+        <file>icons/InformationRegister/h.png</file>
+        <file>icons/InformationRegister/l.png</file>
+        <file>icons/InformationRegister/m.png</file>
+        <file>icons/InformationRegister/x.png</file>
+    </qresource>
+    <qresource prefix="/ForInformationRegisters">
+        <file alias="InformReg16">icons/ForInformationRegisters/InformReg16.png</file>
+    </qresource>
+</RCC>

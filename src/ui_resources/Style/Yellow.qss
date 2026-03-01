@@ -1,0 +1,4 @@
+/* Simple Style */
+QWidget {
+    background: rgba(253,246,213,60%);
+}

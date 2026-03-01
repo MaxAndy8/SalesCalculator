@@ -152,17 +152,22 @@
    </property>
   </action>
   <action name="actionCatalogsNomenclatureListForm">
+   <property name="icon">
+    <iconset resource="../ui_resources/icons.qrc">
+     <normaloff>:/Catalog/p100</normaloff>:/Catalog/p100</iconset>
+   </property>
    <property name="text">
     <string>Nomenclature</string>
    </property>
    <property name="toolTip">
     <string>Nomenclature</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionCatalogsUnitsListForm">
+   <property name="icon">
+    <iconset resource="../ui_resources/icons.qrc">
+     <normaloff>:/Catalog/p100</normaloff>:/Catalog/p100</iconset>
+   </property>
    <property name="text">
     <string>Units</string>
    </property>
@@ -172,8 +177,13 @@
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
+   </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../ui_resources/icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

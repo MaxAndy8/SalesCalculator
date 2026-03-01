@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Picture>
+	<PictureVariant name="edtButtons_85.png" screenDensity="bldpi" glyphWidth="14" glyphHeight="14"/>
+	<PictureVariant name="edtButtons_100.png" screenDensity="ldpi" glyphWidth="16" glyphHeight="16"/>
+	<PictureVariant name="edtButtons_125.png" screenDensity="aldpi" glyphWidth="20" glyphHeight="20"/>
+	<PictureVariant name="edtButtons_150.png" screenDensity="mdpi" glyphWidth="24" glyphHeight="24"/>
+	<PictureVariant name="edtButtons_175.png" screenDensity="amdpi" glyphWidth="28" glyphHeight="28"/>
+	<PictureVariant name="edtButtons_200.png" screenDensity="hdpi" glyphWidth="32" glyphHeight="32"/>
+	<PictureVariant name="edtButtons_300.png" screenDensity="xdpi" glyphWidth="48" glyphHeight="48"/>
+	<PictureVariant name="edtButtons_400.png" screenDensity="udpi" glyphWidth="64" glyphHeight="64"/>
+
+	<PictureVariant name="edtButtonsClassic.png" interfaceVariant="version8_2" screenDensity="ldpi" glyphWidth="12" glyphHeight="12"/>
+	<PictureVariant name="edtButtonsClassic.png" interfaceVariant="version8_2_OrdinaryApp" screenDensity="ldpi" glyphWidth="12" glyphHeight="12"/>
+	<PictureVariant name="edtButtonsOld.png" interfaceVariant="version8_0" screenDensity="ldpi" glyphWidth="9" glyphHeight="9"/>
+</Picture>

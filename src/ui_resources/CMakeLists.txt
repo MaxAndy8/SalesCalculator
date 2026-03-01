@@ -1,12 +1,11 @@
-# add_library(ui_resources STATIC)
+set(SC_UI_RESOURCES_TARGET sc_ui_resources)
 
-# qt_add_resources(ui_resources
-#     "ui_resources"
-#     PREFIX "/"
-#     FILES
-#         resources.qrc
-# )
+add_library(${SC_UI_RESOURCES_TARGET}
+    icons.qrc
+    resource.qrc
+)
 
-# target_link_libraries(ui_resources
-#     PUBLIC Qt6::Core
-# )
+target_link_libraries(${SC_UI_RESOURCES_TARGET}
+    PUBLIC
+        Qt6::Core
+)

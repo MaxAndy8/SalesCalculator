@@ -42,7 +42,7 @@ target_link_libraries(${SC_UI_TARGET}
         sc_application
         sc_core
 
-        # # sc_ui_resources
+        sc_ui_resources
         # # sc_ui_i18n
 )
 

@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>style/Default.qss</file>
+        <file>style/Yellow.qss</file>
+        <file>style/Coffee.qss</file>
+        <file>style/Pagefold.qss</file>
+        <file>style/Nostyle.qss</file>
+        <file>style/Blue.qss</file>
+        <file>style/Khaki.qss</file>
+        <file>style/Application.qss</file>
+        <file>style/Transparent.qss</file>
+    </qresource>
+</RCC>

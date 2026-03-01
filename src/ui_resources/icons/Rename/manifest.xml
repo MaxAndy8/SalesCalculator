@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Picture>
+	<PictureVariant name="rename_85.png" screenDensity="bldpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename_100.png" screenDensity="ldpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename_125.png" screenDensity="aldpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename_150.png" screenDensity="mdpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename_175.png" screenDensity="amdpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename_200.png" screenDensity="hdpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename_300.png" screenDensity="xdpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename_400.png" screenDensity="udpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename.png" interfaceVariant="version8_2" screenDensity="ldpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename.png" interfaceVariant="version8_2_OrdinaryApp" screenDensity="ldpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="rename.png" interfaceVariant="version8_0" screenDensity="ldpi" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="h.png" interfaceVariant="taxiMobile" screenDensity="hdpi" isTemplate="true" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="l.png" interfaceVariant="taxiMobile" screenDensity="ldpi" isTemplate="true" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="m.png" interfaceVariant="taxiMobile" screenDensity="mdpi" isTemplate="true" direction="ltrCanFlipHorizontally"/>
+	<PictureVariant name="x.png" interfaceVariant="taxiMobile" screenDensity="xdpi" isTemplate="true" direction="ltrCanFlipHorizontally"/>
+</Picture>
