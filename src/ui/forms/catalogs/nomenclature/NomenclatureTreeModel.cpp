@@ -21,7 +21,7 @@ NomenclatureTreeModel::NomenclatureTreeModel(
 
 QModelIndex NomenclatureTreeModel::index(int row, int column, const QModelIndex& parentIndex) const
 {
-    if (column != 0 || row < 0)
+    if (column < 0 || column >= columnCount() || row < 0)
         return {};
 
     TreeNode* parentNode = nodeFromIndex(parentIndex);
@@ -64,7 +64,7 @@ int NomenclatureTreeModel::rowCount(const QModelIndex& parentIndex) const
 
 int NomenclatureTreeModel::columnCount(const QModelIndex&) const
 {
-    return 1;
+    return 4;
 }
 
 QVariant NomenclatureTreeModel::data(const QModelIndex& index, int role) const
@@ -78,10 +78,21 @@ QVariant NomenclatureTreeModel::data(const QModelIndex& index, int role) const
 
     if (role == Qt::DisplayRole)
     {
-        if (!node->dto.code.isEmpty())
-            return QStringLiteral("%1 %2").arg(node->dto.code, node->dto.name);
-
-        return node->dto.name;
+        switch (index.column())
+        {
+        case 0:
+            if (!node->dto.code.isEmpty())
+                return QStringLiteral("%1 %2").arg(node->dto.code, node->dto.name);
+            return node->dto.name;
+        case 1:
+            return node->dto.article;
+        case 2:
+            return node->dto.unit;
+        case 3:
+            return node->dto.service ? tr("Yes") : tr("No");
+        default:
+            return {};
+        }
     }
 
     return {};
@@ -89,8 +100,22 @@ QVariant NomenclatureTreeModel::data(const QModelIndex& index, int role) const
 
 QVariant NomenclatureTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section == 0)
-        return tr("Nomenclature");
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    {
+        switch (section)
+        {
+        case 0:
+            return tr("Code");
+        case 1:
+            return tr("Article");
+        case 2:
+            return tr("Unit");
+        case 3:
+            return tr("Service");
+        default:
+            return {};
+        }
+    }
 
     return {};
 }

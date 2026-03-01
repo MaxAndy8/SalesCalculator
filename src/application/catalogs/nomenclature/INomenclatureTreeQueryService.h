@@ -13,7 +13,7 @@ namespace SC::Application::Catalogs::Nomenclature
 
 struct NomenclatureTreeCursor
 {
-    bool lastIsGroup = false;
+    bool lastFolder = false;
     QString lastCode;
     QByteArray lastId;
 };
@@ -22,8 +22,11 @@ struct NomenclatureTreeNodeDto
 {
     QByteArray id;
     std::optional<QByteArray> parentId;
-    bool isGroup = false;
+    bool folder = false;
     QString code;
+    QString article;
+    QString unit;
+    bool service = false;
     QString name;
     bool hasChildren = false;
 };

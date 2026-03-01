@@ -34,6 +34,9 @@ QString baseSelectSql()
         "       n.parent_idrref, "
         "       n.folder, "
         "       n.code, "
+        "       n.article, "
+        "       COALESCE(u.description, '') AS unit_description, "
+        "       n.service, "
         "       n.description, "
         "       EXISTS ("
         "           SELECT 1 "
@@ -41,7 +44,8 @@ QString baseSelectSql()
         "           WHERE child.parent_idrref = n.idrref "
         "             AND child.idrref <> n.idrref"
         "       ) AS has_children "
-        "FROM nomenclature n ");
+        "FROM nomenclature n "
+        "LEFT JOIN units u ON u.idrref = n.unit_idrref ");
 }
 
 void bindCursor(QSqlQuery& query, const std::optional<Cursor>& cursor)
@@ -49,7 +53,7 @@ void bindCursor(QSqlQuery& query, const std::optional<Cursor>& cursor)
     if (!cursor.has_value())
         return;
 
-    query.bindValue(":cursor_is_group", cursor->lastIsGroup);
+    query.bindValue(":cursor_folder", cursor->lastFolder);
     query.bindValue(":cursor_code", cursor->lastCode);
     query.bindValue(":cursor_id", cursor->lastId);
 }
@@ -61,9 +65,9 @@ void appendCursorPredicate(QString& sql, const std::optional<Cursor>& cursor)
 
     sql += QStringLiteral(
         " AND ("
-        "    (n.folder = :cursor_is_group AND (n.code > :cursor_code OR (n.code = :cursor_code AND n.idrref > :cursor_id)))"
+        "    (n.folder = :cursor_folder AND (n.code > :cursor_code OR (n.code = :cursor_code AND n.idrref > :cursor_id)))"
         "    OR "
-        "    (n.folder = false AND :cursor_is_group = true)"
+        "    (n.folder = false AND :cursor_folder = true)"
         " ) ");
 }
 
@@ -114,10 +118,13 @@ Page executePagedQuery(
         const QVariant parentValue = query.value(1);
         if (!parentValue.isNull())
             dto.parentId = parentValue.toByteArray();
-        dto.isGroup = query.value(2).toBool();
+        dto.folder = query.value(2).toBool();
         dto.code = query.value(3).toString();
-        dto.name = query.value(4).toString();
-        dto.hasChildren = query.value(5).toBool();
+        dto.article = query.value(4).toString();
+        dto.unit = query.value(5).toString();
+        dto.service = query.value(6).toBool();
+        dto.name = query.value(7).toString();
+        dto.hasChildren = query.value(8).toBool();
         page.items.push_back(std::move(dto));
     }
 
@@ -125,7 +132,7 @@ Page executePagedQuery(
     {
         const NodeDto lastLoaded = page.items.at(normalizedLimit - 1);
         page.nextCursor = Cursor{
-            .lastIsGroup = lastLoaded.isGroup,
+            .lastFolder = lastLoaded.folder,
             .lastCode = lastLoaded.code,
             .lastId = lastLoaded.id
         };
