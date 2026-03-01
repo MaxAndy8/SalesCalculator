@@ -10,6 +10,8 @@ set(SC_INFRASTRUCTURE_SOURCES
     db/DbProviderGuard.cpp
     auth/SqlAuthService.h
     auth/SqlAuthService.cpp
+    catalogs/nomenclature/SqlNomenclatureTreeQueryService.h
+    catalogs/nomenclature/SqlNomenclatureTreeQueryService.cpp
 )
 
 add_library(${SC_INFRASTRUCTURE_TARGET}

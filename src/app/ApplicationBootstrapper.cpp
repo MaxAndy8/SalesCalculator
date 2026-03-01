@@ -14,6 +14,8 @@
 #include "infrastructure/db/DbProviderGuard.h"
 #include "infrastructure/auth/SqlAuthService.h"
 
+#include "infrastructure/catalogs/nomenclature/SqlNomenclatureTreeQueryService.h"
+
 namespace SC::App
 {
 
@@ -63,6 +65,14 @@ int ApplicationBootstrapper::run()
         // 5. Form controller + MainWindow
         // ==============================
         SC::App::FormControllerImpl formController(user);
+
+        formController.addSqlTreeQueryService(new SC::Infrastructure::Catalogs::Nomenclature::SqlNomenclatureTreeQueryService());   // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Nomenclature_ListForm)
+        //formController.addSqlTreeQueryService(new SC::Infrastructure::Catalogs::Users::SqlUsersTreeQueryService());                 // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Users_ListForm)
+        //formController.addSqlTreeQueryService(new SC::Infrastructure::Catalogs::Units::SqlUnitsTreeQueryService());                 // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Units_ListForm)
+        //formController.addSqlTreeQueryService(new SC::Infrastructure::Document::GoodsReceipt::SqlGoodsReceiptTreeQueryService());   // для FormControllerImpl::getForm(SC::UI::FormType::Document_GoodsReceipt_ListForm)
+        //formController.addSqlTreeQueryService(new SC::Infrastructure::Document::Pricings::SqlPricingsTreeQueryService());           // // для FormControllerImpl::getForm(SC::UI::FormType::Document_GoodsReceipt_ListForm)
+
+
         SC::UI::MainWindow mainWindow(user, &formController);
         mainWindow.show();
 

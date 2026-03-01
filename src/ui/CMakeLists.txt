@@ -15,6 +15,11 @@ set(SC_UI_SOURCES
     forms/base/ListForm.h
     forms/base/ListForm.ui
 
+    forms/catalogs/nomenclature/NomenclatureListForm.cpp
+    forms/catalogs/nomenclature/NomenclatureListForm.h
+    forms/catalogs/nomenclature/NomenclatureTreeModel.cpp
+    forms/catalogs/nomenclature/NomenclatureTreeModel.h
+
     formController/FormType.h
     formController/IFormController.h
 
