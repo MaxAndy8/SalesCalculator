@@ -2,6 +2,7 @@
 #include "ui_ListForm.h"
 
 #include <QAbstractItemModel>
+#include <QPushButton>
 
 namespace SC::UI::Forms::Base
 {
@@ -21,6 +22,11 @@ ListForm::ListForm(QAbstractItemModel* model, QWidget* parent)
 ListForm::~ListForm()
 {
     delete ui;
+}
+
+QPushButton* ListForm::refreshButton() const
+{
+    return ui->refreshButton;
 }
 
 QTreeView* ListForm::treeView() const

@@ -34,6 +34,8 @@ public:
     bool canFetchMore(const QModelIndex& parent) const override;
     void fetchMore(const QModelIndex& parent) override;
 
+    void refresh();
+
 signals:
     void fetchError(const QString& message);
 

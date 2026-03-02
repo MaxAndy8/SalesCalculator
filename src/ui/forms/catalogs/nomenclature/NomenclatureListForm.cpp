@@ -2,6 +2,7 @@
 
 #include "NomenclatureTreeModel.h"
 #include <QHeaderView>
+#include <QPushButton>
 #include <QMessageBox>
 #include <QTreeView>
 
@@ -19,6 +20,7 @@ NomenclatureListForm::NomenclatureListForm(
             {
                 QMessageBox::warning(this, tr("Nomenclature load error"), message);
             });
+    connect(refreshButton(), &QPushButton::clicked, model, &NomenclatureTreeModel::refresh);
 
     treeView()->setUniformRowHeights(true);
     treeView()->setRootIsDecorated(true);

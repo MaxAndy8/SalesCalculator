@@ -162,6 +162,16 @@ void NomenclatureTreeModel::fetchMore(const QModelIndex& parentIndex)
     appendPage(parentIndex, parentNode);
 }
 
+void NomenclatureTreeModel::refresh()
+{
+    beginResetModel();
+    m_root->children.clear();
+    m_root->loadState = LoadState::NotLoaded;
+    m_root->nextCursor.reset();
+    endResetModel();
+    fetchMore(QModelIndex());
+}
+
 NomenclatureTreeModel::TreeNode* NomenclatureTreeModel::nodeFromIndex(const QModelIndex& index) const
 {
     if (!index.isValid())
