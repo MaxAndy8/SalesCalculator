@@ -3,6 +3,7 @@
 
 #include "application/auth/IAuthService.h"
 #include "application/auth/AuthenticatedUser.h"
+#include "core/Logger.h"
 
 #include <QMessageBox>
 
@@ -64,6 +65,8 @@ void AuthDialog::onLoginClicked()
     }
     else
     {
+        SC::Core::Logger::warning(
+            QStringLiteral("Failed login attempt for user '%1'.").arg(login));
         QMessageBox::warning(this, tr("Login"), tr("Invalid login or password."));
     }
 }

@@ -3,6 +3,7 @@
 
 #include "EditDatabaseDialog.h"
 #include "ui/application/ScApplication.h"
+#include "core/Logger.h"
 
 #include <QApplication>
 #include <QDir>
@@ -94,7 +95,10 @@ void SelectDatabaseDialog::addDatabase()
     EditDatabaseDialog dlg(this);
 
     if (dlg.exec() != QDialog::Accepted)
+    {
+        SC::Core::Logger::info(QStringLiteral("Database connection creation was cancelled."));
         return;
+    }
 
     const auto info = dlg.data();
 
@@ -114,6 +118,8 @@ void SelectDatabaseDialog::addDatabase()
 
     m_model->appendRow(row);
     saveConnections();
+    SC::Core::Logger::info(
+        QStringLiteral("Database connection '%1' was added.").arg(info.name));
 }
 
 void SelectDatabaseDialog::editDatabase()
@@ -145,9 +151,15 @@ void SelectDatabaseDialog::editDatabase()
     info.password = m_model->item(row, 5)->text();
 
     // 2. Діалог редагування
+    const QString oldConnectionName = info.name;
     EditDatabaseDialog dlg(info, this);
     if (dlg.exec() != QDialog::Accepted)
+    {
+        SC::Core::Logger::info(
+            QStringLiteral("Editing database connection '%1' was cancelled.")
+                .arg(oldConnectionName));
         return;
+    }
 
     // 3. Отримуємо оновлені дані
     const auto updatedInfo = dlg.data();
@@ -177,6 +189,9 @@ void SelectDatabaseDialog::editDatabase()
 
     // 7. Після оновлення моделі зазвичай потрібно зберегти зміни у QSettings
     saveConnections();
+    SC::Core::Logger::info(
+        QStringLiteral("Database connection '%1' was updated to '%2'.")
+            .arg(oldConnectionName, updatedInfo.name));
 }
 
 void SelectDatabaseDialog::removeDatabase()
@@ -185,8 +200,12 @@ void SelectDatabaseDialog::removeDatabase()
     if (!index.isValid())
         return;
 
+    const QString removedConnectionName = m_model->item(index.row(), 0)->text();
     m_model->removeRow(index.row());
     saveConnections();
+    SC::Core::Logger::info(
+        QStringLiteral("Database connection '%1' was removed.")
+            .arg(removedConnectionName));
 }
 
 void SelectDatabaseDialog::selectDatabase()
@@ -270,6 +289,11 @@ void SelectDatabaseDialog::applySelectedTheme()
 
 void SelectDatabaseDialog::onThemeChanged(int)
 {
+    const QString resourcePath = ui->comboTheme->currentData().toString();
+    const QString themeName = ui->comboTheme->currentText();
+    SC::Core::Logger::info(
+        QStringLiteral("Theme selection changed to '%1' (%2).")
+            .arg(themeName, resourcePath));
     applySelectedTheme();
 }
 
