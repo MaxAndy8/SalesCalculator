@@ -9,5 +9,10 @@
         <file>style/Khaki.qss</file>
         <file>style/Application.qss</file>
         <file>style/Transparent.qss</file>
+        <file>style/Dark.qss</file>
+        <file>style/DarkBlue.qss</file>
+        <file>style/DarkOlive.qss</file>
+        <file>style/OneC83.qss</file>
+        <file>style/Baf.qss</file>
     </qresource>
 </RCC>

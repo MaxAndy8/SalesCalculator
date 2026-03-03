@@ -27,9 +27,12 @@ private slots:
     void editDatabase();
     void removeDatabase();
     void selectDatabase();
+    void onThemeChanged(int index);
 
 private:
     void setupModel();
+    void setupThemes();
+    void applySelectedTheme();
     void loadConnections();
     void saveConnections();
 

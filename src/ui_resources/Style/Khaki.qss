@@ -1,99 +1,113 @@
-
-QWidget#StartScreen, QWidget#MainWidget {
-   border: none;
+QWidget {
+    background-color: #f7f5e8;
+    color: #2f3b1f;
+    font-size: 10pt;
 }
 
-QWidget#StartScreen, .QFrame {
-   background-color: beige;
+QMenuBar {
+    background-color: #ece8cf;
+    border-bottom: 1px solid #c8c08d;
+}
+
+QMenuBar::item {
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+QMenuBar::item:selected, QMenuBar::item:pressed { background-color: #dfdab5; }
+
+QMenu {
+    background-color: #fffef8;
+    border: 1px solid #c8c08d;
+    padding: 4px;
+}
+
+QMenu::item:selected { background-color: #ece5b9; }
+
+QPushButton, QToolButton {
+    background-color: #fffef8;
+    border: 1px solid #bcb376;
+    border-radius: 6px;
+    padding: 6px 10px;
+    min-height: 24px;
+}
+
+QPushButton:hover, QToolButton:hover { background-color: #f1ebc8; }
+QPushButton:pressed, QToolButton:pressed { background-color: #e6dfb0; }
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    background-color: #ffffff;
+    border: 1px solid #c8c08d;
+    border-radius: 6px;
+    padding: 5px 7px;
+    selection-background-color: #e9e0aa;
+    selection-color: #2f3b1f;
+}
+
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 2px solid #9b8f42;
+}
+
+QAbstractItemView {
+    background-color: #ffffff;
+    alternate-background-color: #faf8ec;
+    border: 1px solid #c8c08d;
+    selection-background-color: #ece5b9;
+    selection-color: #2f3b1f;
+}
+
+QHeaderView::section {
+    background-color: #efebd0;
+    border: 1px solid #c8c08d;
+    padding: 6px 8px;
+    font-weight: 600;
+}
+
+/* Usability polish (comfortable density) */
+QWidget {
+    font-family: "Segoe UI";
+    font-size: 10pt;
 }
 
 QPushButton, QToolButton {
-    background-color: palegoldenrod;
-    border-width: 2px;
-    border-color: darkkhaki;
-    border-style: solid;
-    border-radius: 5;
-    padding: 3px;
-    /* min-width: 96px; */
-    /* min-height: 48px; */
+    min-height: 22px;
+    padding: 6px 12px;
 }
 
-QPushButton:hover, QToolButton:hover {
-   background-color: khaki;
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    min-height: 28px;
+    padding: 5px 9px;
 }
 
-QPushButton:pressed, QToolButton:pressed {
-    padding-left: 5px;
-    padding-top: 5px;
-    background-color: #d0d67c;
+QComboBox::drop-down {
+    width: 22px;
 }
 
-QLabel, QAbstractButton {
-    font: italic "Times New Roman";
+QHeaderView::section {
+    min-height: 22px;
 }
 
-QFrame, QLabel#title {
-    border-width: 2px;
-    padding: 1px;
-    border-style: solid;
-    border-color: darkkhaki;
-    border-radius: 5px;
+QAbstractItemView {
+    outline: none;
 }
 
-QFrame:focus {
-    border-width: 3px;
-    padding: 0px;
+QAbstractItemView:focus {
+    border: 2px solid #9b8f42;
 }
 
-
-QLabel {
-    border: none;
-    padding: 0;
-    background: none;
+QPushButton:disabled, QToolButton:disabled,
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled,
+QTextEdit:disabled, QPlainTextEdit:disabled {
+    color: #7f7b61;
+    background-color: #efeddf;
 }
 
-QLabel#title {
-	font: 32px bold;
+QScrollBar:vertical {
+    width: 12px;
+    margin: 0;
 }
 
-QSpinBox {
-     padding-left: 24px;
-     padding-right: 24px;
-	 border-color: darkkhaki;
-	 border-style: solid;
-	 border-radius: 5;
-     border-width: 3;
+QScrollBar:horizontal {
+    height: 12px;
+    margin: 0;
 }
-
-QSpinBox::up-button 
-{
-     subcontrol-origin: padding;
-     subcontrol-position: right; /* position at the top right corner */
-     width: 24px;
-     height: 24px;
-     border-width: 3px;
-	 border-image: url(:/files/spindownpng) 1;
-}
-
-QSpinBox::up-arrow {
-     image: url(:/files/add.png);
-     width: 12px;
-     height: 12px;
- }
-
-
-QSpinBox::down-button 
-{
-     subcontrol-origin: border;
-     subcontrol-position: left;
-     width: 24px;
-     height: 24px;
-     border-width: 3px;
-	 border-image: url(:/files/spindownpng) 1;
-}
-
-QSpinBox::down-arrow {
-     image: url(:/files/remove.png);
-     width: 12px;
-     height: 12px;
- }

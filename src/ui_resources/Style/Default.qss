@@ -1,1 +1,147 @@
-/* empty stylesheet */
+QWidget {
+    background-color: #f5f7fb;
+    color: #1f2937;
+    font-size: 10pt;
+}
+
+QMainWindow, QDialog, QFrame {
+    background-color: #f5f7fb;
+}
+
+QMenuBar {
+    background-color: #e9eef7;
+    border-bottom: 1px solid #c8d2e2;
+}
+
+QMenuBar::item {
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+QMenuBar::item:selected, QMenuBar::item:pressed {
+    background-color: #d6e3fa;
+}
+
+QMenu {
+    background-color: #ffffff;
+    border: 1px solid #c8d2e2;
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 20px 6px 12px;
+    border-radius: 4px;
+}
+
+QMenu::item:selected {
+    background-color: #dbeafe;
+    color: #0f172a;
+}
+
+QPushButton, QToolButton {
+    background-color: #ffffff;
+    border: 1px solid #b8c3d6;
+    border-radius: 6px;
+    padding: 6px 10px;
+    min-height: 24px;
+}
+
+QPushButton:hover, QToolButton:hover {
+    background-color: #edf3ff;
+    border-color: #7ea0d8;
+}
+
+QPushButton:pressed, QToolButton:pressed {
+    background-color: #dbe8ff;
+}
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    background-color: #ffffff;
+    border: 1px solid #b8c3d6;
+    border-radius: 6px;
+    padding: 5px 7px;
+    selection-background-color: #cfe2ff;
+    selection-color: #111827;
+}
+
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 2px solid #5b8def;
+}
+
+QAbstractItemView {
+    background-color: #ffffff;
+    alternate-background-color: #f7f9fd;
+    border: 1px solid #c8d2e2;
+    selection-background-color: #dbeafe;
+    selection-color: #0f172a;
+    show-decoration-selected: 1;
+}
+
+QHeaderView::section {
+    background-color: #edf2fa;
+    color: #334155;
+    border: 1px solid #c8d2e2;
+    padding: 6px 8px;
+    font-weight: 600;
+}
+
+QStatusBar {
+    background-color: #edf2fa;
+    border-top: 1px solid #c8d2e2;
+}
+
+QToolTip {
+    background-color: #fffef7;
+    color: #111827;
+    border: 1px solid #d6c78f;
+    padding: 4px;
+}
+
+/* Usability polish (comfortable density) */
+QWidget {
+    font-family: "Segoe UI";
+    font-size: 10pt;
+}
+
+QPushButton, QToolButton {
+    min-height: 22px;
+    padding: 6px 12px;
+}
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    min-height: 28px;
+    padding: 5px 9px;
+}
+
+QComboBox::drop-down {
+    width: 22px;
+}
+
+QHeaderView::section {
+    min-height: 22px;
+}
+
+QAbstractItemView {
+    outline: none;
+}
+
+QAbstractItemView:focus {
+    border: 2px solid #5b8def;
+}
+
+QPushButton:disabled, QToolButton:disabled,
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled,
+QTextEdit:disabled, QPlainTextEdit:disabled {
+    color: #7a8699;
+    background-color: #eef1f6;
+}
+
+QScrollBar:vertical {
+    width: 12px;
+    margin: 0;
+}
+
+QScrollBar:horizontal {
+    height: 12px;
+    margin: 0;
+}

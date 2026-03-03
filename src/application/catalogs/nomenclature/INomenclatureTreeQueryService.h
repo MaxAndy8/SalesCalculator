@@ -23,6 +23,7 @@ struct NomenclatureTreeNodeDto
     QByteArray id;
     std::optional<QByteArray> parentId;
     bool folder = false;
+    bool marked = false;
     QString code;
     QString article;
     QString unit;

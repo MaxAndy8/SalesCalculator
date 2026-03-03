@@ -2,13 +2,18 @@
 
 #include "core/Logger.h"
 
-#include <QStyleFactory>
-#include <QLocale>
-#include <QTranslator>
 #include <QDebug>
+#include <QFile>
+#include <QLocale>
+#include <QSettings>
+#include <QStyleFactory>
+#include <QTextStream>
+#include <QTranslator>
 
 namespace
 {
+const QString kThemeSettingsKey = QStringLiteral("ui/themeResourcePath");
+const QString kDefaultTheme = QStringLiteral(":/style/Default.qss");
 
 void qtMessageHandler(QtMsgType type,
                       const QMessageLogContext&,
@@ -68,6 +73,12 @@ void ScApplication::initializeMetadata()
 void ScApplication::initializeStyle()
 {
     setStyle(QStyleFactory::create("Fusion"));
+
+    QSettings settings;
+    const QString themePath = settings.value(kThemeSettingsKey, kDefaultTheme).toString();
+
+    if (!applyThemeByResourcePath(themePath) && themePath != kDefaultTheme)
+        applyThemeByResourcePath(kDefaultTheme);
 }
 
 void ScApplication::initializeTranslations()
@@ -96,6 +107,37 @@ void ScApplication::initializeTranslations()
 void ScApplication::installQtMessageHandler()
 {
     qInstallMessageHandler(qtMessageHandler);
+}
+
+bool ScApplication::applyThemeByResourcePath(const QString& resourcePath)
+{
+    QFile file(resourcePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        SC::Core::Logger::warning(
+            QString("Failed to open theme resource: %1").arg(resourcePath)
+        );
+        return false;
+    }
+
+    QTextStream stream(&file);
+    setStyleSheet(stream.readAll());
+
+    m_currentThemeResourcePath = resourcePath;
+
+    QSettings settings;
+    settings.setValue(kThemeSettingsKey, resourcePath);
+
+    SC::Core::Logger::info(
+        QString("Theme applied: %1").arg(resourcePath)
+    );
+
+    return true;
+}
+
+QString ScApplication::currentThemeResourcePath() const
+{
+    return m_currentThemeResourcePath;
 }
 
 } // namespace SC::UI::Application

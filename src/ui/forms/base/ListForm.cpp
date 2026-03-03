@@ -13,6 +13,7 @@ ListForm::ListForm(QAbstractItemModel* model, QWidget* parent)
       ui(new Ui::ListForm)
 {
     ui->setupUi(this);
+
     if (m_model != nullptr && m_model->parent() == nullptr)
         m_model->setParent(this);
 

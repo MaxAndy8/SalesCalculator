@@ -40,6 +40,10 @@ signals:
     void fetchError(const QString& message);
 
 private:
+    QVariant dataDisplay(const QModelIndex& index) const;
+    QVariant dataDecoration(const QModelIndex& index) const;
+
+private:
     enum class LoadState
     {
         NotLoaded,

@@ -1,125 +1,123 @@
-QWidget#StyleWidget
-{
-	background-color: none;
-	background-image: url(icons:nature_1.jpg);
+QWidget {
+    background-color: #f4f7fc;
+    color: #1e293b;
+    font-size: 10pt;
 }
 
-QLabel, QAbstractButton 
-{
-	font: bold;
-	color: beige;
+QMenuBar {
+    background-color: #e6edf8;
+    border-bottom: 1px solid #c2cde0;
 }
 
-QAbstractButton 
-{
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(173,216,230,60%), stop:1 rgba(0,0,139,60%) );
-	border-color: black;
-	border-style: solid;
-	border-width: 3px;
-	border-radius: 6px;
+QMenuBar::item {
+    padding: 6px 10px;
+    border-radius: 4px;
 }
 
-QAbstractButton:pressed, QAbstractButton:checked
-{
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0,0,139,60%), stop:1 rgba(173,216,230,60%) );
+QMenuBar::item:selected, QMenuBar::item:pressed {
+    background-color: #d4e1f7;
 }
 
-QSpinBox {
-	padding-left: 24px;
-	padding-right: 24px;
-	border-color: darkkhaki;
-	border-style: solid;
-	border-radius: 5;
-	border-width: 3;
+QMenu {
+    background-color: #ffffff;
+    border: 1px solid #c2cde0;
+    padding: 4px;
 }
 
-QSpinBox::up-button 
-{
-	subcontrol-origin: padding;
-	subcontrol-position: right; /* position at the top right corner */
-	width: 24px;
-	height: 24px;
-	border-width: 3px;
-	
+QMenu::item {
+    padding: 6px 20px 6px 12px;
+    border-radius: 4px;
 }
 
-QSpinBox::up-arrow 
-{
-	image: url(icons:add.png);
-	width: 18px;
-	height: 18px;
+QMenu::item:selected {
+    background-color: #d8e6fb;
 }
 
-
-QSpinBox::down-button 
-{
-	subcontrol-origin: border;
-	subcontrol-position: left;
-	width: 24px;
-	height: 24px;
-	border-width: 3px;
+QPushButton, QToolButton {
+    background-color: #ffffff;
+    border: 1px solid #aebbd4;
+    border-radius: 6px;
+    padding: 6px 10px;
+    min-height: 24px;
 }
 
-QSpinBox::down-arrow 
-{
-	image: url(icons:remove.png);
-	width: 18px;
-	height: 18px;
+QPushButton:hover, QToolButton:hover { background-color: #ecf3ff; }
+QPushButton:pressed, QToolButton:pressed { background-color: #dce9fd; }
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    background-color: #ffffff;
+    border: 1px solid #aebbd4;
+    border-radius: 6px;
+    padding: 5px 7px;
+    selection-background-color: #d5e5ff;
+    selection-color: #0f172a;
 }
 
-
-QScrollBar:horizontal 
-{
-	border: 1px solid black;
-	background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0,0,139,60%), stop:1 rgba(173,216,230,60%) );
-	height: 15px;
-	margin: 0px 20px 0 20px;
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 2px solid #4e81d8;
 }
 
-QScrollBar::handle:horizontal 
-{
-	border: 1px solid black;
-	background: rgba(0,0,139,60%);
-	min-width: 20px;
+QAbstractItemView {
+    background-color: #ffffff;
+    alternate-background-color: #f8faff;
+    border: 1px solid #c2cde0;
+    selection-background-color: #d8e6fb;
+    selection-color: #1e293b;
 }
 
-QScrollBar::add-line:horizontal 
-{
-	border: 1px solid black;
-	background: rgba(0,0,139,60%);
-	width: 20px;
-	subcontrol-position: right;
-	subcontrol-origin: margin;
+QHeaderView::section {
+    background-color: #e9effa;
+    border: 1px solid #c2cde0;
+    padding: 6px 8px;
+    font-weight: 600;
 }
 
-QScrollBar::sub-line:horizontal 
-{
-	border: 1px solid black;
-	background: rgba(0,0,139,60%);
-	width: 20px;
-	subcontrol-position: left;
-	subcontrol-origin: margin;
+/* Usability polish (comfortable density) */
+QWidget {
+    font-family: "Segoe UI";
+    font-size: 10pt;
 }
 
-QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal 
-{
-	border: none;
-	width: 16px;
-	height: 16px;
+QPushButton, QToolButton {
+    min-height: 22px;
+    padding: 6px 12px;
 }
 
-QScrollBar:left-arrow:horizontal 
-{
-	image: url(icons:add.png)
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    min-height: 28px;
+    padding: 5px 9px;
 }
 
-QScrollBar::right-arrow:horizontal 
-{
-	image: url(icons:remove.png)
+QComboBox::drop-down {
+    width: 22px;
 }
 
-QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal 
-{
-	background: none;
+QHeaderView::section {
+    min-height: 22px;
+}
+
+QAbstractItemView {
+    outline: none;
+}
+
+QAbstractItemView:focus {
+    border: 2px solid #4e81d8;
+}
+
+QPushButton:disabled, QToolButton:disabled,
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled,
+QTextEdit:disabled, QPlainTextEdit:disabled {
+    color: #7a8699;
+    background-color: #edf1f8;
+}
+
+QScrollBar:vertical {
+    width: 12px;
+    margin: 0;
+}
+
+QScrollBar:horizontal {
+    height: 12px;
+    margin: 0;
 }
 

@@ -34,6 +34,7 @@ QString baseSelectSql()
         "SELECT n.idrref, "
         "       n.parent_idrref, "
         "       n.folder, "
+        "       n.marked, "
         "       n.code, "
         "       n.article, "
         "       COALESCE(u.description, '') AS unit_description, "
@@ -120,12 +121,13 @@ Page executePagedQuery(
         if (!parentValue.isNull())
             dto.parentId = parentValue.toByteArray();
         dto.folder = query.value(2).toBool();
-        dto.code = query.value(3).toString();
-        dto.article = query.value(4).toString();
-        dto.unit = query.value(5).toString();
-        dto.service = query.value(6).toBool();
-        dto.name = query.value(7).toString();
-        dto.hasChildren = query.value(8).toBool();
+        dto.marked = query.value(3).toBool();
+        dto.code = query.value(4).toString();
+        dto.article = query.value(5).toString();
+        dto.unit = query.value(6).toString();
+        dto.service = query.value(7).toBool();
+        dto.name = query.value(8).toString();
+        dto.hasChildren = query.value(9).toBool();
         page.items.push_back(std::move(dto));
     }
 

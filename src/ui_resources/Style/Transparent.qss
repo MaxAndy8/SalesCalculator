@@ -1,139 +1,119 @@
-QWidget#StyleWidget
-{
-	background-color: none;
-	background-image: url(:/files/nature_1.jpg);
+QWidget {
+    background-color: rgba(255, 255, 255, 220);
+    color: #1f2937;
+    font-size: 10pt;
 }
 
-QLabel, QAbstractButton 
-{
-	color: beige;
+QMainWindow, QDialog {
+    background-color: rgba(246, 249, 255, 220);
 }
 
-QFrame, QLabel#title {
-    border-width: 2px;
-    padding: 1px;
-    border-style: solid;
-    border-color: black;
-    border-radius: 5px;
+QMenuBar {
+    background-color: rgba(233, 240, 252, 235);
+    border-bottom: 1px solid #bfd0e8;
 }
 
-QFrame:focus {
-    border-width: 3px;
-    padding: 0px;
+QMenuBar::item {
+    padding: 6px 10px;
+    border-radius: 4px;
 }
 
-
-
-QAbstractButton 
-{
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(173,216,230,60%), stop:1 rgba(0,0,139,60%) );
-	border-color: black;
-	border-style: solid;
-	border-width: 3px;
-	border-radius: 6px;
+QMenuBar::item:selected, QMenuBar::item:pressed {
+    background-color: rgba(208, 224, 248, 245);
 }
 
-QAbstractButton:pressed, QAbstractButton:checked
-{
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0,0,139,60%), stop:1 rgba(173,216,230,60%) );
+QMenu {
+    background-color: rgba(255, 255, 255, 245);
+    border: 1px solid #bfd0e8;
+    padding: 4px;
 }
 
-QSpinBox {
-	padding-left: 24px;
-	padding-right: 24px;
-	border-color: darkkhaki;
-	border-style: solid;
-	border-radius: 5;
-	border-width: 3;
+QMenu::item:selected { background-color: rgba(212, 226, 248, 245); }
+
+QPushButton, QToolButton {
+    background-color: rgba(255, 255, 255, 235);
+    border: 1px solid #aebfd8;
+    border-radius: 6px;
+    padding: 6px 10px;
+    min-height: 24px;
 }
 
-QSpinBox::up-button 
-{
-	subcontrol-origin: padding;
-	subcontrol-position: right; /* position at the top right corner */
-	width: 24px;
-	height: 24px;
-	border-width: 3px;
-	
+QPushButton:hover, QToolButton:hover { background-color: rgba(236, 244, 255, 240); }
+QPushButton:pressed, QToolButton:pressed { background-color: rgba(220, 233, 252, 245); }
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    background-color: rgba(255, 255, 255, 245);
+    border: 1px solid #aebfd8;
+    border-radius: 6px;
+    padding: 5px 7px;
+    selection-background-color: rgba(204, 222, 249, 245);
 }
 
-QSpinBox::up-arrow 
-{
-	image: url(:/files/add.png);
-	width: 18px;
-	height: 18px;
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 2px solid #6f97df;
 }
 
-
-QSpinBox::down-button 
-{
-	subcontrol-origin: border;
-	subcontrol-position: left;
-	width: 24px;
-	height: 24px;
-	border-width: 3px;
+QAbstractItemView {
+    background-color: rgba(255, 255, 255, 245);
+    alternate-background-color: rgba(246, 250, 255, 245);
+    border: 1px solid #bfd0e8;
+    selection-background-color: rgba(212, 226, 248, 245);
+    selection-color: #1f2937;
 }
 
-QSpinBox::down-arrow 
-{
-	image: url(:/files/remove.png);
-	width: 18px;
-	height: 18px;
+QHeaderView::section {
+    background-color: rgba(235, 242, 252, 245);
+    border: 1px solid #bfd0e8;
+    padding: 6px 8px;
+    font-weight: 600;
 }
 
-
-QScrollBar:horizontal 
-{
-	border: 1px solid black;
-	background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0,0,139,60%), stop:1 rgba(173,216,230,60%) );
-	height: 15px;
-	margin: 0px 20px 0 20px;
+/* Usability polish (comfortable density) */
+QWidget {
+    font-family: "Segoe UI";
+    font-size: 10pt;
 }
 
-QScrollBar::handle:horizontal 
-{
-	border: 1px solid black;
-	background: rgba(0,0,139,60%);
-	min-width: 20px;
+QPushButton, QToolButton {
+    min-height: 22px;
+    padding: 6px 12px;
 }
 
-QScrollBar::add-line:horizontal 
-{
-	border: 1px solid black;
-	background: rgba(0,0,139,60%);
-	width: 20px;
-	subcontrol-position: right;
-	subcontrol-origin: margin;
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    min-height: 28px;
+    padding: 5px 9px;
 }
 
-QScrollBar::sub-line:horizontal 
-{
-	border: 1px solid black;
-	background: rgba(0,0,139,60%);
-	width: 20px;
-	subcontrol-position: left;
-	subcontrol-origin: margin;
+QComboBox::drop-down {
+    width: 22px;
 }
 
-QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal 
-{
-	border: none;
-	width: 16px;
-	height: 16px;
+QHeaderView::section {
+    min-height: 22px;
 }
 
-QScrollBar:left-arrow:horizontal 
-{
-	image: url(:/files/add.png)
+QAbstractItemView {
+    outline: none;
 }
 
-QScrollBar::right-arrow:horizontal 
-{
-	image: url(:/files/remove.png)
+QAbstractItemView:focus {
+    border: 2px solid #6f97df;
 }
 
-QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal 
-{
-	background: none;
+QPushButton:disabled, QToolButton:disabled,
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled,
+QTextEdit:disabled, QPlainTextEdit:disabled {
+    color: #6f7f99;
+    background-color: rgba(238, 243, 251, 230);
+}
+
+QScrollBar:vertical {
+    width: 12px;
+    margin: 0;
+}
+
+QScrollBar:horizontal {
+    height: 12px;
+    margin: 0;
 }
 

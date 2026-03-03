@@ -1,299 +1,125 @@
-/* Customize any plain widget that is a child of a QMainWindow. */
-QMainWindow > .QWidget {
-    background-color: gainsboro;
-    background-image: url(:/images/pagefold.png);
-    background-position: top right;
-    background-repeat: no-repeat
-}
-
-/* Provide a padding for the layout inside the frame. The frame
-   exists only to provide a padding for the top-right image, so we
-   explicitly disable the border. */
-#mainFrame {
-    padding-right: 30px;
-    border-style: none;
-    border-image: none; /* since we set a border-image below */
-}
-
-/* mainFrame won't have this border-image since we have
-   explicitly set it to 'none' using a more specific selector. */
-QFrame, QLineEdit, QComboBox[editable="true"], QSpinBox {
-    border-image: url(:/images/frame.png) 4;
-    border-width: 3;
-}
-
-QLabel {
-    border: none;
-    border-image: none;
-    padding: 0;
-    background: none;
-}
-
-/* Make text in message boxes selectable. */
-QMessageBox {
-    /* LinksAccessibleByMouse | TextSelectableByMouse */
-    messagebox-text-interaction-flags: 5;
-}
-   
-/* Set the selection colors for all widgets. */
 QWidget {
-    selection-color: black;
-    selection-background-color: Silver;
-    color: black;
+    background-color: #f9fafb;
+    color: #1f2937;
+    font-size: 10pt;
 }
 
-/* Make the entire row selected in item views. */
-QAbstractItemView {
-    show-decoration-selected: 1;
+QMainWindow > QWidget, QDialog {
+    background-color: #f9fafb;
 }
 
-/* Nice WindowsXP-style password character for password line edits. */
-QLineEdit[echoMode="2"] {
-    lineedit-password-character: 9679;
-}
-
-/* Customize tooltips. */
-QToolTip {
-    background-color: rgb(200,200,255);
-    border-color: darkslategray;
-    border-width: 1px;
-    border-style: solid;
-    padding: 3px;
-    font: bold;
-    border-radius: 3px;
-    opacity: 200;
-}
-
-/* Customize radio buttons. */
-
-QRadioButton {
-    spacing: 5px;
-}
-
-QRadioButton::indicator {
-    width: 13px;
-    height: 13px;
-}
-
-QRadioButton::indicator::unchecked {
-    image: url(:/images/radiobutton_unchecked.png);
-}
-
-QRadioButton::indicator:unchecked:hover {
-    image: url(:/images/radiobutton_unchecked_hover.png);
-}
-
-QRadioButton::indicator:unchecked:pressed {
-    image: url(:/images/radiobutton_unchecked_pressed.png);
-}
-
-QRadioButton::indicator::checked {
-    image: url(:/images/radiobutton_checked.png);
-}
-
-QRadioButton::indicator:checked:hover {
-    image: url(:/images/radiobutton_checked_hover.png);
-}
-
-QRadioButton::indicator:checked:pressed {
-    image: url(:/images/radiobutton_checked_pressed.png);
-}
-
-/* Customize arrows. */
-
-*::down-arrow, *::menu-indicator {
-    image: url(:/images/down_arrow.png);
-    width: 7px;
-    height: 7px;
-}
-
-*::down-arrow:disabled, *::down-arrow:off {
-   image: url(:/images/down_arrow_disabled.png);
-}
-
-*::up-arrow {
-    image: url(:/images/up_arrow.png);
-    width: 7px;
-    height: 7px;
-}
-
-*::up-arrow:disabled, *::up-arrow:off {
-   image: url(:/images/up_arrow_disabled.png);
-}
-
-/* Customize push buttons and comboboxes. Our read-only combobox
-   is very similar to a push button, so they share the same border image. */
-
-QPushButton {
-    min-width: 4em;
-}
-
-QPushButton, QComboBox[editable="false"],
-QComboBox[editable="true"]::drop-down {
-    border-image: url(:/images/pushbutton.png) 5;
-    border-width: 5;
-}
-
-QPushButton:hover, QComboBox[editable="false"]:hover,
-QComboBox[editable="true"]::drop-down:hover, QMenuBar::item:hover {
-    border-image: url(:/images/pushbutton_hover.png) 5;
-    border-width: 5;
-}
-
-QPushButton:pressed, QComboBox[editable="false"]:on,
-QComboBox[editable="true"]::drop-down:on, QMenuBar::item:on {
-    border-image: url(:/images/pushbutton_pressed.png) 5;
-    border-width: 5;
-}
-
-/* Customize read-only comboboxes. */
-
-QComboBox[editable="false"] {
-    padding-left: 3px;
-    padding-right: 20px; /* space for the arrow */
-}
-
-QComboBox[editable="false"]::drop-down {
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 15px;
-    border-left-style: solid;
-    border-left-color: darkgray;
-    border-left-width: 1px;
-}
-
-QComboBox[editable="false"]::down-arrow {
-    subcontrol-origin: content;
-    subcontrol-position: center;
-    position: relative;
-    left: 1px; /* 1 pixel dropdown border */
-}
-
-/* The combobox arrow is on when the popup is open. */
-QComboBox[editable="false"]::down-arrow:on {
-    position: relative;
-    top: 1px;
-    left: 2px;
-}
-
-/* Customize editable comboboxes. */
-
-QComboBox[editable="true"] {
-    padding-right: 16px;
-}
-
-QComboBox[editable="true"]::drop-down {
-    subcontrol-origin: border;
-    subcontrol-position: top right;
-    width: 13px;
-    position: absolute;
-    top: 2px;
-    bottom: 2px;
-    right: 2px;
-}
-
-QComboBox[editable="true"]::drop-down,
-QComboBox[editable="true"]::drop-down:hover,
-QComboBox[editable="true"]::drop-down:on {
-    border-width: 0px;  
-    border-left-width: 3px; /* we need only left and center part */
-}
-
-/* Shift the arrow when it's open. */
-QComboBox[editable="true"]::down-arrow:on {
-    position: relative;
-    top: 1px;
-    left: 1px;
-}
-
-/* Customize check boxes. */
-QCheckBox {
-    spacing: 5px;
-}
-
-QCheckBox::indicator {
-    width: 13px;
-    height: 13px;
-}
-
-QCheckBox::indicator:unchecked {
-    image: url(:/images/checkbox_unchecked.png);
-}
-
-QCheckBox::indicator:unchecked:hover {
-    image: url(:/images/checkbox_unchecked_hover.png);
-}
-
-QCheckBox::indicator:unchecked:pressed {
-    image: url(:/images/checkbox_unchecked_pressed.png);
-}
-
-QCheckBox::indicator:checked {
-    image: url(:/images/checkbox_checked.png);
-}
-
-QCheckBox::indicator:checked:hover {
-    image: url(:/images/checkbox_checked_hover.png);
-}
-
-QCheckBox::indicator:checked:pressed {
-    image: url(:/images/checkbox_checked_pressed.png);
-}
-
-/* Customize the size grip. */
-QSizeGrip {
-    image: url(:/images/sizegrip.png);
-    width: 16px;
-    height: 16px;
-}
-
-/* Customize the menu bar. */
 QMenuBar {
-    border-image: none;
-    border-style: none;
-    border-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: darkslategray;
-    padding: 2px;
+    background-color: #eef2f7;
+    border-bottom: 1px solid #c9d1de;
 }
 
-/* Customize spin boxes. */
-
-QSpinBox { 
-    padding-right: 15px;
+QMenuBar::item {
+    padding: 6px 10px;
+    border-radius: 4px;
 }
 
-QSpinBox::up-button {
-    subcontrol-origin: border;
-    subcontrol-position: top right;
-
-    width: 16px; /* 16 + 2*1px border-width = 15px padding + 3px parent border */
-    border-image: url(:/images/spinup.png) 1;
-    border-width: 1px;
+QMenuBar::item:selected, QMenuBar::item:pressed {
+    background-color: #dfe7f1;
 }
 
-QSpinBox::up-button:hover {
-    border-image: url(:/images/spinup_hover.png) 1;
+QMenu {
+    background-color: #ffffff;
+    border: 1px solid #c9d1de;
+    padding: 4px;
 }
 
-QSpinBox::up-button:pressed {
-    border-image: url(:/images/spinup_pressed.png) 1;
+QMenu::item {
+    padding: 6px 20px 6px 12px;
+    border-radius: 4px;
 }
 
-QSpinBox::down-button {
-    subcontrol-origin: border;
-    subcontrol-position: bottom right;
-
-    width: 16px;
-    border-image: url(:/images/spindown.png) 1;
-    border-width: 1px;
-    border-top-width: 0;
+QMenu::item:selected {
+    background-color: #e8eef7;
 }
 
-QSpinBox::down-button:hover {
-    border-image: url(:/images/spindown_hover.png) 1;
+QPushButton, QToolButton {
+    background-color: #ffffff;
+    border: 1px solid #c3cddc;
+    border-radius: 6px;
+    padding: 6px 10px;
+    min-height: 24px;
 }
 
-QSpinBox::down-button:pressed {
-    border-image: url(:/images/spindown_pressed.png) 1;
+QPushButton:hover, QToolButton:hover { background-color: #eef3f8; }
+QPushButton:pressed, QToolButton:pressed { background-color: #e2e9f3; }
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    background-color: #ffffff;
+    border: 1px solid #c3cddc;
+    border-radius: 6px;
+    padding: 5px 7px;
+    selection-background-color: #dde7f5;
+}
+
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 2px solid #7a97c7;
+}
+
+QAbstractItemView {
+    background-color: #ffffff;
+    alternate-background-color: #f8fafe;
+    border: 1px solid #c9d1de;
+    selection-background-color: #e8eef7;
+    selection-color: #1f2937;
+}
+
+QHeaderView::section {
+    background-color: #f0f4fa;
+    border: 1px solid #c9d1de;
+    padding: 6px 8px;
+    font-weight: 600;
+}
+
+/* Usability polish (comfortable density) */
+QWidget {
+    font-family: "Segoe UI";
+    font-size: 10pt;
+}
+
+QPushButton, QToolButton {
+    min-height: 22px;
+    padding: 6px 12px;
+}
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    min-height: 28px;
+    padding: 5px 9px;
+}
+
+QComboBox::drop-down {
+    width: 22px;
+}
+
+QHeaderView::section {
+    min-height: 22px;
+}
+
+QAbstractItemView {
+    outline: none;
+}
+
+QAbstractItemView:focus {
+    border: 2px solid #7a97c7;
+}
+
+QPushButton:disabled, QToolButton:disabled,
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled,
+QTextEdit:disabled, QPlainTextEdit:disabled {
+    color: #7a8699;
+    background-color: #edf1f6;
+}
+
+QScrollBar:vertical {
+    width: 12px;
+    margin: 0;
+}
+
+QScrollBar:horizontal {
+    height: 12px;
+    margin: 0;
 }

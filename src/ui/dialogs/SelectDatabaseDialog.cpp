@@ -2,8 +2,13 @@
 #include "ui_SelectDatabaseDialog.h"
 
 #include "EditDatabaseDialog.h"
+#include "ui/application/ScApplication.h"
 
+#include <QApplication>
+#include <QDir>
+#include <QFileInfo>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include <QSettings>
 
 namespace SC::UI::Dialogs {
@@ -14,6 +19,7 @@ SelectDatabaseDialog::SelectDatabaseDialog(QWidget *parent)
     , m_model(new QStandardItemModel(this))
 {
     ui->setupUi(this);    
+    setupThemes();
 
     setupModel();
     loadConnections();
@@ -48,6 +54,8 @@ SelectDatabaseDialog::SelectDatabaseDialog(QWidget *parent)
     connect(ui->btnRemove, &QPushButton::clicked, this, &SelectDatabaseDialog::removeDatabase);
     connect(ui->btnSelect, &QPushButton::clicked, this, &SelectDatabaseDialog::selectDatabase);
     connect(ui->btnCancel, &QPushButton::clicked, this, &QDialog::reject                     );
+    connect(ui->comboTheme, qOverload<int>(&QComboBox::currentIndexChanged),
+            this, &SelectDatabaseDialog::onThemeChanged);
 }
 
 SelectDatabaseDialog::~SelectDatabaseDialog()
@@ -209,6 +217,60 @@ void SelectDatabaseDialog::setupModel()
         tr("Користувач"),
         tr("Пароль"    )
     });
+}
+
+void SelectDatabaseDialog::setupThemes()
+{
+    ui->comboTheme->clear();
+
+    QDir styleDir(QStringLiteral(":/style"));
+    const QStringList themeFiles =
+        styleDir.entryList({QStringLiteral("*.qss")}, QDir::Files, QDir::Name);
+
+    for (const QString& fileName : themeFiles)
+    {
+        const QString resourcePath = QStringLiteral(":/style/%1").arg(fileName);
+        QString label = QFileInfo(fileName).completeBaseName();
+        label.replace(QRegularExpression(QStringLiteral("([a-z0-9])([A-Z])")), QStringLiteral("\\1 \\2"));
+        label.replace(QLatin1Char('_'), QLatin1Char(' '));
+        label.replace(QLatin1Char('-'), QLatin1Char(' '));
+
+        ui->comboTheme->addItem(tr("%1").arg(label), resourcePath);
+    }
+
+    const auto* app = static_cast<const SC::UI::Application::ScApplication*>(qApp);
+    if (app == nullptr)
+        return;
+
+    const QString currentTheme = app->currentThemeResourcePath();
+    if (currentTheme.isEmpty())
+        return;
+
+    const int currentIndex = ui->comboTheme->findData(currentTheme);
+    if (currentIndex >= 0)
+        ui->comboTheme->setCurrentIndex(currentIndex);
+}
+
+void SelectDatabaseDialog::applySelectedTheme()
+{
+    auto* app = static_cast<SC::UI::Application::ScApplication*>(qApp);
+    if (app == nullptr)
+        return;
+
+    const QString resourcePath = ui->comboTheme->currentData().toString();
+    if (resourcePath.isEmpty())
+        return;
+
+    if (!app->applyThemeByResourcePath(resourcePath))
+    {
+        QMessageBox::warning(this, tr("Theme"),
+                             tr("Failed to apply selected theme."));
+    }
+}
+
+void SelectDatabaseDialog::onThemeChanged(int)
+{
+    applySelectedTheme();
 }
 
 void SelectDatabaseDialog::loadConnections()

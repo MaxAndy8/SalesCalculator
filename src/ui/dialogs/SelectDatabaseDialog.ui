@@ -74,6 +74,16 @@
       </spacer>
      </item>
      <item>
+      <widget class="QLabel" name="labelTheme">
+       <property name="text">
+        <string>Theme</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboTheme"/>
+     </item>
+     <item>
       <widget class="QPushButton" name="btnCancel">
        <property name="text">
         <string>Cancel</string>

@@ -1,0 +1,107 @@
+QWidget {
+    background-color: #1a1f18;
+    color: #e7ecd9;
+    font-family: "Segoe UI";
+    font-size: 10pt;
+}
+
+QMainWindow, QDialog {
+    background-color: #1a1f18;
+}
+
+QMenuBar {
+    background-color: #252d22;
+    border-bottom: 1px solid #4a5b42;
+}
+
+QMenuBar::item {
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+QMenuBar::item:selected, QMenuBar::item:pressed {
+    background-color: #364234;
+}
+
+QMenu {
+    background-color: #20281d;
+    border: 1px solid #4a5b42;
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 20px 6px 12px;
+    border-radius: 4px;
+}
+
+QMenu::item:selected {
+    background-color: #3f513a;
+}
+
+QPushButton, QToolButton {
+    background-color: #2d3929;
+    border: 1px solid #5f7653;
+    border-radius: 6px;
+    padding: 6px 12px;
+    min-height: 22px;
+    color: #e7ecd9;
+}
+
+QPushButton:hover, QToolButton:hover {
+    background-color: #3a4935;
+    border-color: #7a936b;
+}
+
+QPushButton:pressed, QToolButton:pressed {
+    background-color: #465742;
+}
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    background-color: #141913;
+    border: 1px solid #5f7653;
+    border-radius: 6px;
+    padding: 5px 9px;
+    min-height: 28px;
+    selection-background-color: #4f7a45;
+    selection-color: #f7fff2;
+}
+
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 2px solid #93c47d;
+}
+
+QAbstractItemView {
+    background-color: #141913;
+    alternate-background-color: #1b2219;
+    border: 1px solid #4a5b42;
+    selection-background-color: #4f7a45;
+    selection-color: #f7fff2;
+    outline: none;
+}
+
+QAbstractItemView:focus {
+    border: 2px solid #93c47d;
+}
+
+QHeaderView::section {
+    background-color: #2a3526;
+    color: #e7ecd9;
+    border: 1px solid #4a5b42;
+    padding: 6px 8px;
+    min-height: 22px;
+    font-weight: 600;
+}
+
+QToolTip {
+    background-color: #111510;
+    color: #f4f9eb;
+    border: 1px solid #93c47d;
+    padding: 4px;
+}
+
+QPushButton:disabled, QToolButton:disabled,
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled,
+QTextEdit:disabled, QPlainTextEdit:disabled {
+    color: #99a890;
+    background-color: #2a3227;
+}

@@ -1,4 +1,115 @@
-/* Simple Style */
 QWidget {
-    background: rgba(253,246,213,60%);
+    background-color: #fffbea;
+    color: #3b3222;
+    font-size: 10pt;
+}
+
+QMenuBar {
+    background-color: #f6efc7;
+    border-bottom: 1px solid #ddcf87;
+}
+
+QMenuBar::item {
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+QMenuBar::item:selected, QMenuBar::item:pressed {
+    background-color: #efe3a6;
+}
+
+QMenu {
+    background-color: #fffdf3;
+    border: 1px solid #ddcf87;
+    padding: 4px;
+}
+
+QMenu::item:selected { background-color: #f4e9b4; }
+
+QPushButton, QToolButton {
+    background-color: #fffdf3;
+    border: 1px solid #d6c56e;
+    border-radius: 6px;
+    padding: 6px 10px;
+    min-height: 24px;
+}
+
+QPushButton:hover, QToolButton:hover { background-color: #f8efc7; }
+QPushButton:pressed, QToolButton:pressed { background-color: #efe2a9; }
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    background-color: #ffffff;
+    border: 1px solid #ddcf87;
+    border-radius: 6px;
+    padding: 5px 7px;
+    selection-background-color: #f3e7b1;
+    selection-color: #3b3222;
+}
+
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border: 2px solid #c7aa2a;
+}
+
+QAbstractItemView {
+    background-color: #ffffff;
+    alternate-background-color: #fffeF6;
+    border: 1px solid #ddcf87;
+    selection-background-color: #f4e9b4;
+    selection-color: #3b3222;
+}
+
+QHeaderView::section {
+    background-color: #f8f1cc;
+    border: 1px solid #ddcf87;
+    padding: 6px 8px;
+    font-weight: 600;
+}
+
+/* Usability polish (comfortable density) */
+QWidget {
+    font-family: "Segoe UI";
+    font-size: 10pt;
+}
+
+QPushButton, QToolButton {
+    min-height: 22px;
+    padding: 6px 12px;
+}
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit, QPlainTextEdit {
+    min-height: 28px;
+    padding: 5px 9px;
+}
+
+QComboBox::drop-down {
+    width: 22px;
+}
+
+QHeaderView::section {
+    min-height: 22px;
+}
+
+QAbstractItemView {
+    outline: none;
+}
+
+QAbstractItemView:focus {
+    border: 2px solid #c7aa2a;
+}
+
+QPushButton:disabled, QToolButton:disabled,
+QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled,
+QTextEdit:disabled, QPlainTextEdit:disabled {
+    color: #7f7660;
+    background-color: #f2eed7;
+}
+
+QScrollBar:vertical {
+    width: 12px;
+    margin: 0;
+}
+
+QScrollBar:horizontal {
+    height: 12px;
+    margin: 0;
 }

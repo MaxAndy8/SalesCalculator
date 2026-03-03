@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QApplication>
+#include <QString>
 #include <memory>
 
 class QTranslator;
@@ -17,6 +18,9 @@ public:
     ScApplication(const ScApplication&) = delete;
     ScApplication& operator=(const ScApplication&) = delete;
 
+    bool applyThemeByResourcePath(const QString& resourcePath);
+    QString currentThemeResourcePath() const;
+
 private:
     void initializeMetadata();
     void initializeStyle();
@@ -25,6 +29,7 @@ private:
 
 private:
     std::unique_ptr<QTranslator> m_translator;
+    QString m_currentThemeResourcePath;
 };
 
 } // namespace SC::UI::Application

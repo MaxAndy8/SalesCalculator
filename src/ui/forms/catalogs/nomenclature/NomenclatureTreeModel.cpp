@@ -1,6 +1,7 @@
 #include "NomenclatureTreeModel.h"
 
 #include <QDebug>
+#include <QIcon>
 #include <exception>
 
 namespace SC::UI::Forms::Catalogs::Nomenclature
@@ -72,30 +73,50 @@ QVariant NomenclatureTreeModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return {};
 
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        return dataDisplay(index);
+    case Qt::DecorationRole:
+        return dataDecoration(index);
+    default:
+        return {};
+    }
+}
+
+QVariant NomenclatureTreeModel::dataDisplay(const QModelIndex& index) const
+{
     const auto* node = static_cast<const TreeNode*>(index.internalPointer());
     if (node == nullptr || node->isVirtualRoot)
         return {};
 
-    if (role == Qt::DisplayRole)
+    switch (index.column())
     {
-        switch (index.column())
-        {
-        case 0:
-            if (!node->dto.code.isEmpty())
-                return QStringLiteral("%1 %2").arg(node->dto.code, node->dto.name);
-            return node->dto.name;
-        case 1:
-            return node->dto.article;
-        case 2:
-            return node->dto.unit;
-        case 3:
-            return node->dto.service ? tr("Yes") : tr("No");
-        default:
-            return {};
-        }
+    case 0:
+        if (!node->dto.code.isEmpty())
+            return QStringLiteral("%1 %2").arg(node->dto.code, node->dto.name);
+        return node->dto.name;
+    case 1:
+        return node->dto.article;
+    case 2:
+        return node->dto.unit;
+    case 3:
+        return node->dto.service ? tr("Yes") : tr("No");
+    default:
+        return {};
     }
+}
 
-    return {};
+QVariant NomenclatureTreeModel::dataDecoration(const QModelIndex& index) const
+{
+    const auto* node = static_cast<const TreeNode*>(index.internalPointer());
+    if (node == nullptr || node->isVirtualRoot || index.column() != 0)
+        return {};
+
+    if (node->dto.folder)
+        return node->dto.marked ? QIcon(":/ForCatalogs/FolderDeletionMark16") : QIcon(":/ForCatalogs/Folder16");
+
+    return node->dto.marked ? QIcon(":/ForCatalogs/ItemDeletionMark16") : QIcon(":/ForCatalogs/Item16");
 }
 
 QVariant NomenclatureTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
