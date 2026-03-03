@@ -21,6 +21,12 @@ public:
         SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* queryService,
         QWidget* parent = nullptr);
     ~NomenclatureListForm() override = default;
+
+private:
+    void onDeleteButtonClicked();
+
+private:
+    SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* m_queryService = nullptr;
 };
 
 } // namespace SC::UI::Forms::Catalogs::Nomenclature

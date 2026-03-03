@@ -73,12 +73,18 @@ QVariant NomenclatureTreeModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return {};
 
+    const auto* node = static_cast<const TreeNode*>(index.internalPointer());
+    if (node == nullptr || node->isVirtualRoot)
+        return {};
+
     switch (role)
     {
     case Qt::DisplayRole:
         return dataDisplay(index);
     case Qt::DecorationRole:
         return dataDecoration(index);
+    case IdRole:
+        return node->dto.id;
     default:
         return {};
     }

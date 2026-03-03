@@ -43,6 +43,8 @@ class INomenclatureQueryService : public SC::Application::Catalogs::ICatalogQuer
 public:
     virtual ~INomenclatureQueryService() = default;
 
+    virtual bool ToggleDeletionMarkForSelection(const std::vector<QByteArray>& selectedIds) = 0;
+
     virtual NomenclatureTreePage fetchRootPage(
         int limit,
         const std::optional<NomenclatureTreeCursor>& cursor) = 0;

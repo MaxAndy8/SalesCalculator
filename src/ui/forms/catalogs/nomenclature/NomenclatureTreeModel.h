@@ -16,6 +16,12 @@ class NomenclatureTreeModel final : public QAbstractItemModel
     Q_OBJECT
 
 public:
+    enum Role
+    {
+        IdRole = Qt::UserRole + 1
+    };
+
+public:
     explicit NomenclatureTreeModel(
         SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* queryService,
         QObject* parent = nullptr,

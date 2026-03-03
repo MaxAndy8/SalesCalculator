@@ -25,6 +25,11 @@ ListForm::~ListForm()
     delete ui;
 }
 
+QPushButton* ListForm::deleteButton() const
+{
+    return ui->deleteButton;
+}
+
 QPushButton* ListForm::refreshButton() const
 {
     return ui->refreshButton;

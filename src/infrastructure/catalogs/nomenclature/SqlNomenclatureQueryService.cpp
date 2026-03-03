@@ -1,6 +1,7 @@
 #include "SqlNomenclatureQueryService.h"
 
 #include "infrastructure/db/DbConnectionProvider.h"
+#include "infrastructure/db/UnitOfWork.h"
 
 #include <QDebug>
 #include <QtSql/QSqlError>
@@ -171,6 +172,73 @@ bool SqlNomenclatureQueryService::Delete(const QByteArray& id)
 {
     (void)id;
     throw std::logic_error("Delete is not implemented");
+}
+
+bool SqlNomenclatureQueryService::ToggleDeletionMarkForSelection(const std::vector<QByteArray>& selectedIds)
+{
+    if (selectedIds.empty())
+        return false;
+
+    auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
+
+    QString seedSql;
+    seedSql.reserve(48 * static_cast<int>(selectedIds.size()));
+    for (int i = 0; i < static_cast<int>(selectedIds.size()); ++i)
+    {
+        if (i > 0)
+            seedSql += QStringLiteral(" UNION ALL ");
+
+        seedSql += QStringLiteral("SELECT CAST(:id%1 AS bytea) AS id").arg(i);
+    }
+
+    QString sql = QStringLiteral(
+        "WITH RECURSIVE seed(id) AS ( %1 ), "
+        "affected(id) AS ( "
+        "    SELECT id FROM seed "
+        "    UNION "
+        "    SELECT n.idrref "
+        "    FROM nomenclature n "
+        "    JOIN affected a ON n.parent_idrref = a.id "
+        "    WHERE n.idrref <> a.id "
+        "), "
+        "target(value) AS ( "
+        "    SELECT CASE "
+        "        WHEN EXISTS ("
+        "            SELECT 1 "
+        "            FROM nomenclature n "
+        "            JOIN affected a ON a.id = n.idrref "
+        "            WHERE n.marked = TRUE"
+        "        ) THEN FALSE "
+        "        ELSE TRUE "
+        "    END "
+        ") "
+        "UPDATE nomenclature n "
+        "SET marked = (SELECT value FROM target) "
+        "WHERE n.idrref IN (SELECT id FROM affected)")
+                      .arg(seedSql);
+
+    QSqlQuery query(db);
+    query.prepare(sql);
+    for (int i = 0; i < static_cast<int>(selectedIds.size()); ++i)
+        query.bindValue(QStringLiteral(":id%1").arg(i), selectedIds[static_cast<std::size_t>(i)]);
+
+    try
+    {
+        SC::Infrastructure::Persistence::UnitOfWork::begin();
+        if (!query.exec())
+        {
+            const QString error = query.lastError().text();
+            qWarning() << "SqlNomenclatureQueryService::ToggleDeletionMarkForSelection:" << error;
+            throw std::runtime_error(error.toStdString());
+        }
+        SC::Infrastructure::Persistence::UnitOfWork::commit();
+        return true;
+    }
+    catch (...)
+    {
+        SC::Infrastructure::Persistence::UnitOfWork::rollback();
+        throw;
+    }
 }
 
 SC::Application::Catalogs::Nomenclature::NomenclatureTreePage

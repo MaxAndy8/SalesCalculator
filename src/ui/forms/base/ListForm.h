@@ -26,6 +26,7 @@ public:
     ListForm& operator=(const ListForm&) = delete;
 
 protected:
+    QPushButton* deleteButton() const;
     QPushButton* refreshButton() const;
     QTreeView* treeView() const;
     void setTreeModel(QAbstractItemModel* model);
