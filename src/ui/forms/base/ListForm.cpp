@@ -29,6 +29,11 @@ QTreeView* ListForm::treeView() const
     return ui->treeView;
 }
 
+QLineEdit* ListForm::searchLineEdit() const
+{
+    return ui->searchLineEdit;
+}
+
 void ListForm::setTreeModel(QAbstractItemModel* model)
 {
     m_model = model;

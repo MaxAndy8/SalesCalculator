@@ -77,16 +77,28 @@ void appendCursorPredicate(QString& sql, const std::optional<Cursor>& cursor)
 Page executePagedQuery(
     const std::optional<QByteArray>& parentId,
     int limit,
-    const std::optional<Cursor>& cursor)
+    const std::optional<Cursor>& cursor,
+    const QString& searchText)
 {
     const int normalizedLimit = normalizeLimit(limit);
     const int fetchLimit = normalizedLimit + 1;
+    const QString trimmedSearch = searchText.trimmed();
+    const bool hasSearch = !trimmedSearch.isEmpty();
 
     auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
     QSqlQuery query(db);
 
     QString sql = baseSelectSql();
-    if (parentId.has_value())
+    if (hasSearch)
+    {
+        sql += QStringLiteral(
+            "WHERE (n.code ILIKE :search_pattern "
+            "   OR n.description ILIKE :search_pattern "
+            "   OR COALESCE(n.article, '') ILIKE :search_pattern "
+            "   OR COALESCE(u.description, '') ILIKE :search_pattern "
+            "   OR CASE WHEN n.service THEN 'yes' ELSE 'no' END ILIKE :search_pattern) ");
+    }
+    else if (parentId.has_value())
         sql += QStringLiteral(
             "WHERE n.parent_idrref = :parent_id "
             "  AND n.idrref <> :parent_id ");
@@ -103,6 +115,8 @@ Page executePagedQuery(
     query.prepare(sql);
     if (parentId.has_value())
         query.bindValue(":parent_id", *parentId);
+    if (hasSearch)
+        query.bindValue(":search_pattern", QStringLiteral("%%1%").arg(trimmedSearch));
     bindCursor(query, cursor);
     query.bindValue(":limit", fetchLimit);
 
@@ -264,18 +278,20 @@ SqlNomenclatureQueryService::ToggleDeletionMarkForSelection(const std::vector<QB
 SC::Application::Catalogs::Nomenclature::NomenclatureTreePage
 SqlNomenclatureQueryService::fetchRootPage(
     int limit,
-    const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor)
+    const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor,
+    const QString& searchText)
 {
-    return executePagedQuery(std::nullopt, limit, cursor);
+    return executePagedQuery(std::nullopt, limit, cursor, searchText);
 }
 
 SC::Application::Catalogs::Nomenclature::NomenclatureTreePage
 SqlNomenclatureQueryService::fetchChildrenPage(
     const QByteArray& parentId,
     int limit,
-    const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor)
+    const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor,
+    const QString& searchText)
 {
-    return executePagedQuery(parentId, limit, cursor);
+    return executePagedQuery(parentId, limit, cursor, searchText);
 }
 
 } // namespace SC::Infrastructure::Catalogs::Nomenclature

@@ -54,12 +54,14 @@ public:
 
     virtual NomenclatureTreePage fetchRootPage(
         int limit,
-        const std::optional<NomenclatureTreeCursor>& cursor) = 0;
+        const std::optional<NomenclatureTreeCursor>& cursor,
+        const QString& searchText = QString()) = 0;
 
     virtual NomenclatureTreePage fetchChildrenPage(
         const QByteArray& parentId,
         int limit,
-        const std::optional<NomenclatureTreeCursor>& cursor) = 0;
+        const std::optional<NomenclatureTreeCursor>& cursor,
+        const QString& searchText = QString()) = 0;
 };
 
 } // namespace SC::Application::Catalogs::Nomenclature

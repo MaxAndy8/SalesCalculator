@@ -162,6 +162,9 @@ bool NomenclatureTreeModel::hasChildren(const QModelIndex& parentIndex) const
     if (!parentIndex.isValid())
         return true;
 
+    if (isSearchMode())
+        return false;
+
     const auto* node = static_cast<const TreeNode*>(parentIndex.internalPointer());
     if (node == nullptr)
         return false;
@@ -180,6 +183,9 @@ bool NomenclatureTreeModel::canFetchMore(const QModelIndex& parentIndex) const
 
     if (parentNode->isVirtualRoot)
         return parentNode->loadState != LoadState::FullyLoaded;
+
+    if (isSearchMode())
+        return false;
 
     if (!parentNode->dto.hasChildren)
         return false;
@@ -207,6 +213,16 @@ void NomenclatureTreeModel::refresh()
     m_root->nextCursor.reset();
     endResetModel();
     fetchMore(QModelIndex());
+}
+
+void NomenclatureTreeModel::setSearchText(const QString& searchText)
+{
+    const QString trimmedSearch = searchText.trimmed();
+    if (m_searchText == trimmedSearch)
+        return;
+
+    m_searchText = trimmedSearch;
+    refresh();
 }
 
 void NomenclatureTreeModel::applyMarkedState(const std::vector<QByteArray>& affectedIds, bool marked)
@@ -287,11 +303,12 @@ void NomenclatureTreeModel::appendPage(const QModelIndex& parentIndex, TreeNode*
     {
         if (parentNode->isVirtualRoot)
         {
-            page = m_queryService->fetchRootPage(m_pageSize, parentNode->nextCursor);
+            page = m_queryService->fetchRootPage(m_pageSize, parentNode->nextCursor, m_searchText);
         }
         else
         {
-            page = m_queryService->fetchChildrenPage(parentNode->dto.id, m_pageSize, parentNode->nextCursor);
+            page = m_queryService->fetchChildrenPage(
+                parentNode->dto.id, m_pageSize, parentNode->nextCursor, m_searchText);
         }
     }
     catch (const std::exception& ex)
@@ -318,7 +335,15 @@ void NomenclatureTreeModel::appendPage(const QModelIndex& parentIndex, TreeNode*
         auto child = std::make_unique<TreeNode>();
         child->dto = item;
         child->parent = parentNode;
-        child->loadState = item.hasChildren ? LoadState::NotLoaded : LoadState::FullyLoaded;
+        if (isSearchMode())
+        {
+            child->dto.hasChildren = false;
+            child->loadState = LoadState::FullyLoaded;
+        }
+        else
+        {
+            child->loadState = item.hasChildren ? LoadState::NotLoaded : LoadState::FullyLoaded;
+        }
         parentNode->children.push_back(std::move(child));
     }
     endInsertRows();
@@ -334,6 +359,11 @@ void NomenclatureTreeModel::appendPage(const QModelIndex& parentIndex, TreeNode*
     const QModelIndex selfIndex = indexFromNode(parentNode);
     if (selfIndex.isValid())
         emit dataChanged(selfIndex, selfIndex);
+}
+
+bool NomenclatureTreeModel::isSearchMode() const
+{
+    return !m_searchText.isEmpty();
 }
 
 } // namespace SC::UI::Forms::Catalogs::Nomenclature

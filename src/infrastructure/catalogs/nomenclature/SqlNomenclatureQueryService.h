@@ -19,12 +19,14 @@ public:
 
     SC::Application::Catalogs::Nomenclature::NomenclatureTreePage fetchRootPage(
         int limit,
-        const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor) override;
+        const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor,
+        const QString& searchText) override;
 
     SC::Application::Catalogs::Nomenclature::NomenclatureTreePage fetchChildrenPage(
         const QByteArray& parentId,
         int limit,
-        const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor) override;
+        const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor,
+        const QString& searchText) override;
 };
 
 } // namespace SC::Infrastructure::Catalogs::Nomenclature

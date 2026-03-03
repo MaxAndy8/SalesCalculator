@@ -4,6 +4,7 @@
 #include <QAbstractItemView>
 #include <QHeaderView>
 #include <QItemSelectionModel>
+#include <QLineEdit>
 #include <QMessageBox>
 #include <QSet>
 #include <QTreeView>
@@ -25,6 +26,12 @@ NomenclatureListForm::NomenclatureListForm(
             [this](const QString& message)
             {
                 QMessageBox::warning(this, tr("Nomenclature load error"), message);
+            });
+    connect(searchLineEdit(), &QLineEdit::returnPressed, this,
+            [this, model]()
+            {
+                if (model != nullptr && searchLineEdit() != nullptr)
+                    model->setSearchText(searchLineEdit()->text());
             });
 
     treeView()->setSelectionBehavior(QAbstractItemView::SelectRows);

@@ -3,6 +3,7 @@
 #include <QWidget>
 
 class QAbstractItemModel;
+class QLineEdit;
 class QTreeView;
 
 namespace Ui
@@ -26,6 +27,7 @@ public:
 
 protected:
     QTreeView* treeView() const;
+    QLineEdit* searchLineEdit() const;
     void setTreeModel(QAbstractItemModel* model);
     QAbstractItemModel* treeModel() const;
     virtual void handleDeleteRequested();

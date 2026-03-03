@@ -41,6 +41,7 @@ public:
     void fetchMore(const QModelIndex& parent) override;
 
     void refresh();
+    void setSearchText(const QString& searchText);
     void applyMarkedState(const std::vector<QByteArray>& affectedIds, bool marked);
 
 signals:
@@ -73,10 +74,12 @@ private:
     QModelIndex indexFromNode(const TreeNode* node) const;
     int rowInParent(const TreeNode* node) const;
     void appendPage(const QModelIndex& parentIndex, TreeNode* parentNode);
+    bool isSearchMode() const;
 
 private:
     SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* m_queryService;
     int m_pageSize;
+    QString m_searchText;
     std::unique_ptr<TreeNode> m_root;
 };
 
