@@ -4,6 +4,8 @@
 
 -- DROP TRIGGER IF EXISTS check_duplicate_articles_trigger ON public.nomenclature;
 -- DROP FUNCTION IF EXISTS public.check_duplicate_articles_trigger();
+-- DROP TRIGGER IF EXISTS nomenclature_folder_fields_guard_trigger ON public.nomenclature;
+-- DROP FUNCTION IF EXISTS public.nomenclature_folder_fields_guard_trigger();
 -- DROP TABLE IF EXISTS public.nomenclature;
 
 CREATE TABLE IF NOT EXISTS public.nomenclature
@@ -35,6 +37,28 @@ ALTER TABLE IF EXISTS public.nomenclature
     ALTER COLUMN parent_idrref SET STORAGE PLAIN;
 ALTER TABLE IF EXISTS public.nomenclature
     ALTER COLUMN unit_idrref SET STORAGE PLAIN;
+ALTER TABLE IF EXISTS public.nomenclature
+    ALTER COLUMN service DROP NOT NULL;
+
+-- Для folder=true поля article/unit_idrref/service повинні бути NULL.
+-- NOT VALID: не перевіряє історичні дані, але блокує нові/оновлені порушення.
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'nomenclature_folder_fields_null_chk'
+          AND conrelid = 'public.nomenclature'::regclass
+    ) THEN
+        ALTER TABLE public.nomenclature
+            ADD CONSTRAINT nomenclature_folder_fields_null_chk
+            CHECK (
+                NOT folder
+                OR (article IS NULL AND unit_idrref IS NULL AND service IS NULL)
+            ) NOT VALID;
+    END IF;
+END
+$$;
 
 -- Індекси
 CREATE UNIQUE INDEX IF NOT EXISTS nomenclature_article
@@ -94,3 +118,22 @@ CREATE TRIGGER check_duplicate_articles_trigger
     ON public.nomenclature
     FOR EACH ROW
     EXECUTE FUNCTION public.check_duplicate_articles_trigger();
+
+-- Тригер-блокування порушень для нових/оновлених рядків папок.
+CREATE OR REPLACE FUNCTION public.nomenclature_folder_fields_guard_trigger()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF NEW.folder AND (NEW.article IS NOT NULL OR NEW.unit_idrref IS NOT NULL OR NEW.service IS NOT NULL) THEN
+        RAISE EXCEPTION 'For folder=true, article, unit_idrref and service must be NULL.';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER nomenclature_folder_fields_guard_trigger
+    BEFORE INSERT OR UPDATE
+    ON public.nomenclature
+    FOR EACH ROW
+    EXECUTE FUNCTION public.nomenclature_folder_fields_guard_trigger();

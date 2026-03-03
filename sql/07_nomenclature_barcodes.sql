@@ -34,6 +34,14 @@ RETURNS TRIGGER
 LANGUAGE plpgsql
 AS $$
 BEGIN
+    IF EXISTS (
+        SELECT 1 FROM public.nomenclature n
+        WHERE n.idrref = NEW.nomenclature_idrref
+          AND n.folder = true
+    ) THEN
+        RAISE EXCEPTION 'Barcodes are forbidden for folder nomenclature.';
+    END IF;
+
     IF NOT EXISTS (
         SELECT 1 FROM public.nomenclature n
         WHERE n.idrref = NEW.nomenclature_idrref AND n.unit_idrref = NEW.unit_idrref

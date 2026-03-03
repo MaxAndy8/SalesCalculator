@@ -36,6 +36,14 @@ BEGIN
     IF EXISTS (
         SELECT 1 FROM public.nomenclature n
         WHERE n.idrref = NEW.nomenclature_idrref
+          AND n.folder = true
+    ) THEN
+        RAISE EXCEPTION 'Additional units are forbidden for folder nomenclature.';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM public.nomenclature n
+        WHERE n.idrref = NEW.nomenclature_idrref
           AND n.unit_idrref IS NOT NULL
           AND n.unit_idrref = NEW.unit_idrref
     ) THEN
