@@ -27,12 +27,13 @@ NomenclatureListForm::NomenclatureListForm(
             {
                 QMessageBox::warning(this, tr("Nomenclature load error"), message);
             });
-    connect(searchLineEdit(), &QLineEdit::returnPressed, this,
-            [this, model]()
-            {
-                if (model != nullptr && searchLineEdit() != nullptr)
-                    model->setSearchText(searchLineEdit()->text());
-            });
+    const auto applySearch = [this, model]()
+    {
+        if (model != nullptr && searchLineEdit() != nullptr)
+            model->setSearchText(searchLineEdit()->text());
+    };
+    connect(searchLineEdit(), &QLineEdit::returnPressed, this, applySearch);
+    connect(searchLineEdit(), &QLineEdit::editingFinished, this, applySearch);
 
     treeView()->setSelectionBehavior(QAbstractItemView::SelectRows);
     treeView()->setSelectionMode(QAbstractItemView::ExtendedSelection);
