@@ -14,7 +14,8 @@ public:
     bool CreateFolder() override;
     bool Write(const QByteArray& id) override;
     bool Delete(const QByteArray& id) override;
-    bool ToggleDeletionMarkForSelection(const std::vector<QByteArray>& selectedIds) override;
+    SC::Application::Catalogs::Nomenclature::ToggleDeletionMarkResult ToggleDeletionMarkForSelection(
+        const std::vector<QByteArray>& selectedIds) override;
 
     SC::Application::Catalogs::Nomenclature::NomenclatureTreePage fetchRootPage(
         int limit,

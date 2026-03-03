@@ -174,10 +174,12 @@ bool SqlNomenclatureQueryService::Delete(const QByteArray& id)
     throw std::logic_error("Delete is not implemented");
 }
 
-bool SqlNomenclatureQueryService::ToggleDeletionMarkForSelection(const std::vector<QByteArray>& selectedIds)
+SC::Application::Catalogs::Nomenclature::ToggleDeletionMarkResult
+SqlNomenclatureQueryService::ToggleDeletionMarkForSelection(const std::vector<QByteArray>& selectedIds)
 {
+    SC::Application::Catalogs::Nomenclature::ToggleDeletionMarkResult result;
     if (selectedIds.empty())
-        return false;
+        return result;
 
     auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
 
@@ -214,7 +216,8 @@ bool SqlNomenclatureQueryService::ToggleDeletionMarkForSelection(const std::vect
         ") "
         "UPDATE nomenclature n "
         "SET marked = (SELECT value FROM target) "
-        "WHERE n.idrref IN (SELECT id FROM affected)")
+        "WHERE n.idrref IN (SELECT id FROM affected) "
+        "RETURNING n.idrref, n.marked")
                       .arg(seedSql);
 
     QSqlQuery query(db);
@@ -231,8 +234,25 @@ bool SqlNomenclatureQueryService::ToggleDeletionMarkForSelection(const std::vect
             qWarning() << "SqlNomenclatureQueryService::ToggleDeletionMarkForSelection:" << error;
             throw std::runtime_error(error.toStdString());
         }
+
+        bool markedInitialized = false;
+        while (query.next())
+        {
+            result.affectedIds.push_back(query.value(0).toByteArray());
+            if (!markedInitialized)
+            {
+                result.newMarkedValue = query.value(1).toBool();
+                markedInitialized = true;
+            }
+        }
+
+        qInfo() << "SqlNomenclatureQueryService::ToggleDeletionMarkForSelection"
+                << "selectedIds:" << selectedIds.size()
+                << "affectedIds:" << result.affectedIds.size()
+                << "newMarkedValue:" << result.newMarkedValue;
+
         SC::Infrastructure::Persistence::UnitOfWork::commit();
-        return true;
+        return result;
     }
     catch (...)
     {

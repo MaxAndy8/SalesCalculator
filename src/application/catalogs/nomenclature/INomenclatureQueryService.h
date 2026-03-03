@@ -38,12 +38,19 @@ struct NomenclatureTreePage
     std::optional<NomenclatureTreeCursor> nextCursor;
 };
 
+struct ToggleDeletionMarkResult
+{
+    std::vector<QByteArray> affectedIds;
+    bool newMarkedValue = false;
+};
+
 class INomenclatureQueryService : public SC::Application::Catalogs::ICatalogQueryService
 {
 public:
     virtual ~INomenclatureQueryService() = default;
 
-    virtual bool ToggleDeletionMarkForSelection(const std::vector<QByteArray>& selectedIds) = 0;
+    virtual ToggleDeletionMarkResult ToggleDeletionMarkForSelection(
+        const std::vector<QByteArray>& selectedIds) = 0;
 
     virtual NomenclatureTreePage fetchRootPage(
         int limit,

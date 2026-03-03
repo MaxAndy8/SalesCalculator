@@ -67,8 +67,9 @@ void NomenclatureListForm::onDeleteButtonClicked()
 
     try
     {
-        if (m_queryService->ToggleDeletionMarkForSelection(selectedIds))
-            static_cast<NomenclatureTreeModel*>(treeModel())->refresh();
+        const auto result = m_queryService->ToggleDeletionMarkForSelection(selectedIds);
+        static_cast<NomenclatureTreeModel*>(treeModel())->applyMarkedState(
+            result.affectedIds, result.newMarkedValue);
     }
     catch (const std::exception& ex)
     {

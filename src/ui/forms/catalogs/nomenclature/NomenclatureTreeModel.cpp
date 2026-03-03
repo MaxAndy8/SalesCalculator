@@ -2,7 +2,9 @@
 
 #include <QDebug>
 #include <QIcon>
+#include <QSet>
 #include <exception>
+#include <functional>
 
 namespace SC::UI::Forms::Catalogs::Nomenclature
 {
@@ -205,6 +207,41 @@ void NomenclatureTreeModel::refresh()
     m_root->nextCursor.reset();
     endResetModel();
     fetchMore(QModelIndex());
+}
+
+void NomenclatureTreeModel::applyMarkedState(const std::vector<QByteArray>& affectedIds, bool marked)
+{
+    if (affectedIds.empty())
+        return;
+
+    QSet<QByteArray> affectedSet;
+    affectedSet.reserve(static_cast<qsizetype>(affectedIds.size()));
+    for (const QByteArray& id : affectedIds)
+        affectedSet.insert(id);
+
+    std::vector<TreeNode*> updatedNodes;
+    std::function<void(TreeNode*)> visit = [&](TreeNode* node)
+    {
+        if (node == nullptr)
+            return;
+
+        if (!node->isVirtualRoot && affectedSet.contains(node->dto.id) && node->dto.marked != marked)
+        {
+            node->dto.marked = marked;
+            updatedNodes.push_back(node);
+        }
+
+        for (const auto& child : node->children)
+            visit(child.get());
+    };
+    visit(m_root.get());
+
+    for (TreeNode* updatedNode : updatedNodes)
+    {
+        const QModelIndex index = indexFromNode(updatedNode);
+        if (index.isValid())
+            emit dataChanged(index, index, {Qt::DecorationRole});
+    }
 }
 
 NomenclatureTreeModel::TreeNode* NomenclatureTreeModel::nodeFromIndex(const QModelIndex& index) const

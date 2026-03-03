@@ -41,6 +41,7 @@ public:
     void fetchMore(const QModelIndex& parent) override;
 
     void refresh();
+    void applyMarkedState(const std::vector<QByteArray>& affectedIds, bool marked);
 
 signals:
     void fetchError(const QString& message);
