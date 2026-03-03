@@ -22,8 +22,9 @@ public:
         QWidget* parent = nullptr);
     ~NomenclatureListForm() override = default;
 
-private:
-    void onDeleteButtonClicked();
+protected:
+    void handleDeleteRequested() override;
+    void handleRefreshRequested() override;
 
 private:
     SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* m_queryService = nullptr;

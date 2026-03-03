@@ -32,7 +32,7 @@ MainWindow::~MainWindow()
 void MainWindow::setupUi()
 {
     ui->setupUi(this);
-    ui->toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    ui->catalogsToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     // Початковий стан статус-бару
     statusBar()->showMessage(tr("Ready"));

@@ -17,9 +17,35 @@
    <item>
     <layout class="QHBoxLayout" name="toolbarLayout">
      <item>
-      <widget class="QPushButton" name="createButton">
+      <widget class="QPushButton" name="createItemButton">
        <property name="text">
-        <string>Create</string>
+        <string>Create item</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../ui_resources/icons.qrc">
+         <normaloff>:/CreateListItem/icons/CreateListItem/tbglacti.png</normaloff>:/CreateListItem/icons/CreateListItem/tbglacti.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="createFolderButton">
+       <property name="text">
+        <string>Create folder</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../ui_resources/icons.qrc">
+         <normaloff>:/CreateFolder/icons/CreateFolder/tbreflist.png</normaloff>:/CreateFolder/icons/CreateFolder/tbreflist.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="copyButton">
+       <property name="text">
+        <string>Copy</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../ui_resources/icons.qrc">
+         <normaloff>:/CloneListItem/icons/CloneListItem/tbglacti.png</normaloff>:/CloneListItem/icons/CloneListItem/tbglacti.png</iconset>
        </property>
       </widget>
      </item>
@@ -28,12 +54,20 @@
        <property name="text">
         <string>Edit</string>
        </property>
+       <property name="icon">
+        <iconset resource="../../../ui_resources/icons.qrc">
+         <normaloff>:/Change/icons/Change/tbglacti.png</normaloff>:/Change/icons/Change/tbglacti.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="deleteButton">
        <property name="text">
         <string>Delete</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../ui_resources/icons.qrc">
+         <normaloff>:/MarkToDelete/icons/MarkToDelete/tbfrnt.png</normaloff>:/MarkToDelete/icons/MarkToDelete/tbfrnt.png</iconset>
        </property>
       </widget>
      </item>
@@ -42,12 +76,16 @@
        <property name="text">
         <string>Refresh</string>
        </property>
+       <property name="icon">
+        <iconset resource="../../../ui_resources/icons.qrc">
+         <normaloff>:/Refresh/icons/Refresh/tbglacti.png</normaloff>:/Refresh/icons/Refresh/tbglacti.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <spacer name="toolbarSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -70,7 +108,194 @@
     <widget class="QTreeView" name="treeView"/>
    </item>
   </layout>
+  <action name="actionCreateItem">
+   <property name="icon">
+    <iconset resource="../../../ui_resources/icons.qrc">
+     <normaloff>:/CreateListItem/icons/CreateListItem/tbglacti.png</normaloff>:/CreateListItem/icons/CreateListItem/tbglacti.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create item</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionEdit">
+   <property name="icon">
+    <iconset resource="../../../ui_resources/icons.qrc">
+     <normaloff>:/Change/icons/Change/tbglacti.png</normaloff>:/Change/icons/Change/tbglacti.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="../../../ui_resources/icons.qrc">
+     <normaloff>:/MarkToDelete/icons/MarkToDelete/tbfrnt.png</normaloff>:/MarkToDelete/icons/MarkToDelete/tbfrnt.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionRefresh">
+   <property name="icon">
+    <iconset resource="../../../ui_resources/icons.qrc">
+     <normaloff>:/Refresh/icons/Refresh/tbglacti.png</normaloff>:/Refresh/icons/Refresh/tbglacti.png</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionCreateFolder">
+   <property name="icon">
+    <iconset resource="../../../ui_resources/icons.qrc">
+     <normaloff>:/CreateFolder/icons/CreateFolder/tbreflist.png</normaloff>:/CreateFolder/icons/CreateFolder/tbreflist.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create folder</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="icon">
+    <iconset resource="../../../ui_resources/icons.qrc">
+     <normaloff>:/CloneListItem/icons/CloneListItem/tbglacti.png</normaloff>:/CloneListItem/icons/CloneListItem/tbglacti.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../../../ui_resources/icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>createItemButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionCreateItem</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>createFolderButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionCreateFolder</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>161</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>copyButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionCopy</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>258</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionEdit</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>344</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>deleteButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionDelete</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>602</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>refreshButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionRefresh</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>520</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionEdit</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>344</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

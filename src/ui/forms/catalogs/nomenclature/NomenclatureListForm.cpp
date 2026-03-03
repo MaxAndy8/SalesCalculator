@@ -5,7 +5,6 @@
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QMessageBox>
-#include <QPushButton>
 #include <QSet>
 #include <QTreeView>
 
@@ -27,8 +26,6 @@ NomenclatureListForm::NomenclatureListForm(
             {
                 QMessageBox::warning(this, tr("Nomenclature load error"), message);
             });
-    connect(deleteButton(), &QPushButton::clicked, this, &NomenclatureListForm::onDeleteButtonClicked);
-    connect(refreshButton(), &QPushButton::clicked, model, &NomenclatureTreeModel::refresh);
 
     treeView()->setSelectionBehavior(QAbstractItemView::SelectRows);
     treeView()->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -39,7 +36,7 @@ NomenclatureListForm::NomenclatureListForm(
     treeView()->header()->setSectionResizeMode(QHeaderView::Interactive);
 }
 
-void NomenclatureListForm::onDeleteButtonClicked()
+void NomenclatureListForm::handleDeleteRequested()
 {
     if (m_queryService == nullptr || treeView()->selectionModel() == nullptr)
         return;
@@ -75,6 +72,13 @@ void NomenclatureListForm::onDeleteButtonClicked()
     {
         QMessageBox::warning(this, tr("Nomenclature delete mark error"), QString::fromUtf8(ex.what()));
     }
+}
+
+void NomenclatureListForm::handleRefreshRequested()
+{
+    auto* model = static_cast<NomenclatureTreeModel*>(treeModel());
+    if (model != nullptr)
+        model->refresh();
 }
 
 } // namespace SC::UI::Forms::Catalogs::Nomenclature

@@ -3,7 +3,6 @@
 #include <QWidget>
 
 class QAbstractItemModel;
-class QPushButton;
 class QTreeView;
 
 namespace Ui
@@ -26,15 +25,23 @@ public:
     ListForm& operator=(const ListForm&) = delete;
 
 protected:
-    QPushButton* deleteButton() const;
-    QPushButton* refreshButton() const;
     QTreeView* treeView() const;
     void setTreeModel(QAbstractItemModel* model);
     QAbstractItemModel* treeModel() const;
+    virtual void handleDeleteRequested();
+    virtual void handleRefreshRequested();
 
 protected:
     QAbstractItemModel* m_model;
     Ui::ListForm* ui;
+private slots:
+    void on_actionCreateItem_triggered();
+    void on_actionCreateFolder_triggered();
+    void on_actionCopy_triggered();
+    void on_actionEdit_triggered();
+    void on_actionDelete_triggered();
+    void on_actionRefresh_triggered();
+
 };
 
 } // namespace SC::UI::Forms::Base

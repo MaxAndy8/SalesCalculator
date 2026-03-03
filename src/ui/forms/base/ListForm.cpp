@@ -2,7 +2,6 @@
 #include "ui_ListForm.h"
 
 #include <QAbstractItemModel>
-#include <QPushButton>
 
 namespace SC::UI::Forms::Base
 {
@@ -25,16 +24,6 @@ ListForm::~ListForm()
     delete ui;
 }
 
-QPushButton* ListForm::deleteButton() const
-{
-    return ui->deleteButton;
-}
-
-QPushButton* ListForm::refreshButton() const
-{
-    return ui->refreshButton;
-}
-
 QTreeView* ListForm::treeView() const
 {
     return ui->treeView;
@@ -50,5 +39,55 @@ QAbstractItemModel* ListForm::treeModel() const
 {
     return m_model;
 }
+
+void ListForm::handleDeleteRequested()
+{
+    //***********************************************
+}
+
+void ListForm::handleRefreshRequested()
+{
+    //***********************************************
+}
+
+void ListForm::on_actionCreateItem_triggered()
+{
+    //***********************************************
+}
+
+void ListForm::on_actionCreateFolder_triggered()
+{
+    //***********************************************
+}
+
+void ListForm::on_actionCopy_triggered()
+{
+    //***********************************************
+}
+
+void ListForm::on_actionEdit_triggered()
+{
+    //***********************************************
+}
+
+void ListForm::on_actionDelete_triggered()
+{
+    handleDeleteRequested();
+}
+
+void ListForm::on_actionRefresh_triggered()
+{
+    handleRefreshRequested();
+}
+
+
+
+
+
+
+
+
+
+
 
 } // namespace SC::UI::Forms::Base
