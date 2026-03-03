@@ -65,7 +65,7 @@ int NomenclatureTreeModel::rowCount(const QModelIndex& parentIndex) const
 
 int NomenclatureTreeModel::columnCount(const QModelIndex&) const
 {
-    return 4;
+    return 5;
 }
 
 QVariant NomenclatureTreeModel::data(const QModelIndex& index, int role) const
@@ -93,14 +93,20 @@ QVariant NomenclatureTreeModel::dataDisplay(const QModelIndex& index) const
     switch (index.column())
     {
     case 0:
-        if (!node->dto.code.isEmpty())
-            return QStringLiteral("%1 %2").arg(node->dto.code, node->dto.name);
-        return node->dto.name;
+        return node->dto.code;
     case 1:
-        return node->dto.article;
+        return node->dto.name;
     case 2:
-        return node->dto.unit;
+        if (node->dto.folder)
+            return {};
+        return node->dto.article;
     case 3:
+        if (node->dto.folder)
+            return {};
+        return node->dto.unit;
+    case 4:
+        if (node->dto.folder)
+            return {};
         return node->dto.service ? tr("Yes") : tr("No");
     default:
         return {};
@@ -128,10 +134,12 @@ QVariant NomenclatureTreeModel::headerData(int section, Qt::Orientation orientat
         case 0:
             return tr("Code");
         case 1:
-            return tr("Article");
+            return tr("Name");
         case 2:
-            return tr("Unit");
+            return tr("Article");
         case 3:
+            return tr("Unit");
+        case 4:
             return tr("Service");
         default:
             return {};
