@@ -1,6 +1,6 @@
 #pragma once
 
-#include "application/catalogs/nomenclature/INomenclatureTreeQueryService.h"
+#include "application/catalogs/nomenclature/INomenclatureQueryService.h"
 
 #include <QAbstractItemModel>
 
@@ -17,7 +17,7 @@ class NomenclatureTreeModel final : public QAbstractItemModel
 
 public:
     explicit NomenclatureTreeModel(
-        SC::Application::Catalogs::Nomenclature::INomenclatureTreeQueryService* queryService,
+        SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* queryService,
         QObject* parent = nullptr,
         int pageSize = 150);
 
@@ -68,7 +68,7 @@ private:
     void appendPage(const QModelIndex& parentIndex, TreeNode* parentNode);
 
 private:
-    SC::Application::Catalogs::Nomenclature::INomenclatureTreeQueryService* m_queryService;
+    SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* m_queryService;
     int m_pageSize;
     std::unique_ptr<TreeNode> m_root;
 };

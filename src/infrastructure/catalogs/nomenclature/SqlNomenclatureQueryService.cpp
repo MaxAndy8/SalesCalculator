@@ -1,4 +1,4 @@
-#include "SqlNomenclatureTreeQueryService.h"
+#include "SqlNomenclatureQueryService.h"
 
 #include "infrastructure/db/DbConnectionProvider.h"
 
@@ -109,7 +109,7 @@ Page executePagedQuery(
     if (!query.exec())
     {
         const QString error = query.lastError().text();
-        qWarning() << "SqlNomenclatureTreeQueryService::executePagedQuery:" << error;
+        qWarning() << "SqlNomenclatureQueryService::executePagedQuery:" << error;
         throw std::runtime_error(error.toStdString());
     }
 
@@ -146,13 +146,35 @@ Page executePagedQuery(
 }
 } // namespace
 
-SC::UI::FormType SqlNomenclatureTreeQueryService::formType() const
+SC::UI::FormType SqlNomenclatureQueryService::formType() const
 {
     return SC::UI::FormType::Catalog_Nomenclature_ListForm;
 }
 
+bool SqlNomenclatureQueryService::CreateItem()
+{
+    throw std::logic_error("CreateItem is not implemented");
+}
+
+bool SqlNomenclatureQueryService::CreateFolder()
+{
+    throw std::logic_error("CreateFolder is not implemented");
+}
+
+bool SqlNomenclatureQueryService::Write(const QByteArray& id)
+{
+    (void)id;
+    throw std::logic_error("Write is not implemented");
+}
+
+bool SqlNomenclatureQueryService::Delete(const QByteArray& id)
+{
+    (void)id;
+    throw std::logic_error("Delete is not implemented");
+}
+
 SC::Application::Catalogs::Nomenclature::NomenclatureTreePage
-SqlNomenclatureTreeQueryService::fetchRootPage(
+SqlNomenclatureQueryService::fetchRootPage(
     int limit,
     const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor)
 {
@@ -160,7 +182,7 @@ SqlNomenclatureTreeQueryService::fetchRootPage(
 }
 
 SC::Application::Catalogs::Nomenclature::NomenclatureTreePage
-SqlNomenclatureTreeQueryService::fetchChildrenPage(
+SqlNomenclatureQueryService::fetchChildrenPage(
     const QByteArray& parentId,
     int limit,
     const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor)

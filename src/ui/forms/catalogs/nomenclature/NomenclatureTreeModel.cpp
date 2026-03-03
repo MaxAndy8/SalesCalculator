@@ -8,7 +8,7 @@ namespace SC::UI::Forms::Catalogs::Nomenclature
 {
 
 NomenclatureTreeModel::NomenclatureTreeModel(
-    SC::Application::Catalogs::Nomenclature::INomenclatureTreeQueryService* queryService,
+    SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* queryService,
     QObject* parent,
     int pageSize)
     : QAbstractItemModel(parent),

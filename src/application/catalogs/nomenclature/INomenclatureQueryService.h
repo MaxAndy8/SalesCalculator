@@ -1,6 +1,6 @@
 #pragma once
 
-#include "application/ITreeQueryService.h"
+#include "application/catalogs/ICatalogQueryService.h"
 
 #include <QByteArray>
 #include <QString>
@@ -38,10 +38,10 @@ struct NomenclatureTreePage
     std::optional<NomenclatureTreeCursor> nextCursor;
 };
 
-class INomenclatureTreeQueryService : public SC::Application::ITreeQueryService
+class INomenclatureQueryService : public SC::Application::Catalogs::ICatalogQueryService
 {
 public:
-    virtual ~INomenclatureTreeQueryService() = default;
+    virtual ~INomenclatureQueryService() = default;
 
     virtual NomenclatureTreePage fetchRootPage(
         int limit,

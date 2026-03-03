@@ -5,10 +5,10 @@
 namespace SC::Application
 {
 
-class ITreeQueryService
+class IQueryService
 {
 public:
-    virtual ~ITreeQueryService() = default;
+    virtual ~IQueryService() = default;
 
     virtual SC::UI::FormType formType() const = 0;
 };

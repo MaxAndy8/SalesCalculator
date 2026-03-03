@@ -2,14 +2,14 @@
 
 #include "ui/formController/IFormController.h"
 #include "application/auth/AuthenticatedUser.h"
-#include "application/ITreeQueryService.h"
+#include "application/IQueryService.h"
 
 #include <map>
 #include <memory>
 
 namespace SC::Application::Catalogs::Nomenclature
 {
-class INomenclatureTreeQueryService;
+class INomenclatureQueryService;
 }
 
 namespace SC::App
@@ -20,14 +20,14 @@ class FormControllerImpl final : public SC::UI::IFormController
 public:
     explicit FormControllerImpl(const SC::Application::Auth::AuthenticatedUser& user);
 
-    void addSqlTreeQueryService(
-        SC::Application::ITreeQueryService* queryService);
+    void addSqlQueryService(
+        SC::Application::IQueryService* queryService);
 
     QWidget* getForm(SC::UI::FormType type) override;
 
 private:
     SC::Application::Auth::AuthenticatedUser m_user;
-    std::map<SC::UI::FormType, std::unique_ptr<SC::Application::ITreeQueryService>> m_queryServices;
+    std::map<SC::UI::FormType, std::unique_ptr<SC::Application::IQueryService>> m_queryServices;
 };
 
 } // namespace SC::App

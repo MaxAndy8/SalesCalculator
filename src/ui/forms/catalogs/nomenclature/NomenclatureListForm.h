@@ -4,7 +4,7 @@
 
 namespace SC::Application::Catalogs::Nomenclature
 {
-class INomenclatureTreeQueryService;
+class INomenclatureQueryService;
 }
 
 namespace SC::UI::Forms::Catalogs::Nomenclature
@@ -18,7 +18,7 @@ class NomenclatureListForm final : public SC::UI::Forms::Base::ListForm
 
 public:
     explicit NomenclatureListForm(
-        SC::Application::Catalogs::Nomenclature::INomenclatureTreeQueryService* queryService,
+        SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* queryService,
         QWidget* parent = nullptr);
     ~NomenclatureListForm() override = default;
 };

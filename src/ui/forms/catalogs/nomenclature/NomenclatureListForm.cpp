@@ -1,6 +1,7 @@
 #include "NomenclatureListForm.h"
 
 #include "NomenclatureTreeModel.h"
+#include <QAbstractItemView>
 #include <QHeaderView>
 #include <QPushButton>
 #include <QMessageBox>
@@ -10,7 +11,7 @@ namespace SC::UI::Forms::Catalogs::Nomenclature
 {
 
 NomenclatureListForm::NomenclatureListForm(
-    SC::Application::Catalogs::Nomenclature::INomenclatureTreeQueryService* queryService,
+    SC::Application::Catalogs::Nomenclature::INomenclatureQueryService* queryService,
     QWidget* parent)
     : SC::UI::Forms::Base::ListForm(new NomenclatureTreeModel(queryService), parent)
 {
@@ -22,6 +23,8 @@ NomenclatureListForm::NomenclatureListForm(
             });
     connect(refreshButton(), &QPushButton::clicked, model, &NomenclatureTreeModel::refresh);
 
+    treeView()->setSelectionBehavior(QAbstractItemView::SelectRows);
+    treeView()->setSelectionMode(QAbstractItemView::ExtendedSelection);
     treeView()->setUniformRowHeights(true);
     treeView()->setRootIsDecorated(true);
     treeView()->setAlternatingRowColors(true);

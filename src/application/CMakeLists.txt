@@ -9,12 +9,14 @@
 set(SC_APPLICATION_TARGET sc_application)
 
 set(SC_APPLICATION_SOURCES
-    ITreeQueryService.h
+    IQueryService.h
+    catalogs/ICatalogQueryService.h
+    documents/IDocumentQueryService.h
     database/DatabaseConnectionInfo.h
     auth/AuthenticatedUser.h
     auth/AuthenticatedUser.cpp
     auth/IAuthService.h
-    catalogs/nomenclature/INomenclatureTreeQueryService.h
+    catalogs/nomenclature/INomenclatureQueryService.h
 )
 
 add_library(${SC_APPLICATION_TARGET}
