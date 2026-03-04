@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include "application/auth/AuthenticatedUser.h"
 #include <memory>
+class QCloseEvent;
 
 namespace Ui
 {
@@ -27,7 +28,8 @@ public:
     MainWindow(const MainWindow&) = delete;
     MainWindow& operator=(const MainWindow&) = delete;
 
-
+protected:
+    void closeEvent(QCloseEvent* event) override;
 
 private:
     Ui::MainWindow *ui;
@@ -35,6 +37,8 @@ private:
     SC::UI::IFormController* formController;
 
     void setupUi();
+    void restoreWindowSettings();
+    void saveWindowSettings() const;
 
 public slots:
     void openWindowForm(const QString idMdiSubWindow, const FormType formType, const QString WindowTitle = "", const QModelIndex index = QModelIndex() );

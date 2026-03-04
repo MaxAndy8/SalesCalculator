@@ -1,5 +1,7 @@
 #include <QMessageBox>
 #include <QMdiSubWindow>
+#include <QCloseEvent>
+#include <QSettings>
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
@@ -7,6 +9,13 @@
 
 namespace SC::UI
 {
+namespace
+{
+const QString kMainWindowGeometryKey = QStringLiteral("ui/mainWindow/geometry");
+const QString kMainWindowStateKey = QStringLiteral("ui/mainWindow/state");
+const QString kMainWindowWindowStateKey = QStringLiteral("ui/mainWindow/windowState");
+const QString kMainWindowHasSavedStateKey = QStringLiteral("ui/mainWindow/hasSavedState");
+} // anonymous namespace
 
 MainWindow::MainWindow(const SC::Application::Auth::AuthenticatedUser& user,
                        IFormController* formController,
@@ -17,6 +26,7 @@ MainWindow::MainWindow(const SC::Application::Auth::AuthenticatedUser& user,
       formController(formController)
 {
     setupUi();
+    restoreWindowSettings();
 
     // можна одразу застосувати ролі
     // setupUi();
@@ -36,6 +46,46 @@ void MainWindow::setupUi()
 
     // Початковий стан статус-бару
     statusBar()->showMessage(tr("Ready"));
+}
+
+void MainWindow::restoreWindowSettings()
+{
+    QSettings settings;
+    const bool hasSavedState = settings.value(kMainWindowHasSavedStateKey, false).toBool();
+
+    if (!hasSavedState)
+    {
+        setWindowState(windowState() | Qt::WindowMaximized);
+        return;
+    }
+
+    const QByteArray geometry = settings.value(kMainWindowGeometryKey).toByteArray();
+    if (!geometry.isEmpty())
+        restoreGeometry(geometry);
+
+    const QByteArray mainWindowState = settings.value(kMainWindowStateKey).toByteArray();
+    if (!mainWindowState.isEmpty())
+        restoreState(mainWindowState);
+
+    const auto savedWindowState = static_cast<Qt::WindowStates>(
+        settings.value(kMainWindowWindowStateKey, static_cast<int>(Qt::WindowNoState)).toInt());
+    const auto topLevelStateFlags = savedWindowState & (Qt::WindowMaximized | Qt::WindowFullScreen);
+    setWindowState((windowState() & ~Qt::WindowMinimized) | topLevelStateFlags);
+}
+
+void MainWindow::saveWindowSettings() const
+{
+    QSettings settings;
+    settings.setValue(kMainWindowGeometryKey, saveGeometry());
+    settings.setValue(kMainWindowStateKey, saveState());
+    settings.setValue(kMainWindowWindowStateKey, static_cast<int>(windowState()));
+    settings.setValue(kMainWindowHasSavedStateKey, true);
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    saveWindowSettings();
+    QMainWindow::closeEvent(event);
 }
 
 void MainWindow::openWindowForm(const QString idMdiSubWindow, const FormType formType, const QString WindowTitle, const QModelIndex index)
