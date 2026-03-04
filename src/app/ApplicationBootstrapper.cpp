@@ -2,6 +2,10 @@
 
 #include <QDialog>
 #include <QMessageBox>
+#include <QSplashScreen>
+#include <QPixmap>
+#include <QTimer>
+#include <QThread>
 
 #include "ui/application/ScApplication.h"
 #include "ui/dialogs/SelectDatabaseDialog.h"
@@ -67,8 +71,29 @@ int ApplicationBootstrapper::run()
         //formController.addSqlQueryService(new SC::Infrastructure::Document::GoodsReceipt::SqlGoodsReceiptTreeQueryService());   // для FormControllerImpl::getForm(SC::UI::FormType::Document_GoodsReceipt_ListForm)
         //formController.addSqlQueryService(new SC::Infrastructure::Document::Pricings::SqlPricingsTreeQueryService());           // // для FormControllerImpl::getForm(SC::UI::FormType::Document_GoodsReceipt_ListForm)
 
+        // Створюємо піксельну карту для заставки
+        QPixmap pix(":/SC_App/SplashScreen"); // Шлях до вашого зображення
+        QSplashScreen splash(pix);
 
+        // Показуємо заставку
+        splash.show();
+
+        // Можна виводити текст поверх зображення
+        splash.showMessage("Завантаження модулів...", Qt::AlignBottom | Qt::AlignCenter, Qt::white);
+
+        // Емуляція тривалого завантаження
+        // В реальному проекті тут ініціалізуються бази даних або мережа
+        for (int i = 0; i <= 100; i += 20) {
+            splash.showMessage(QString("Завантаження: %1%").arg(i),
+                               Qt::AlignBottom | Qt::AlignCenter, Qt::white);
+            QThread::msleep(500); // Затримка для демонстрації
+            app.processEvents();    // Оновлюємо інтерфейс, щоб заставка не "зависла"
+        }
+
+        // Створюємо та показуємо головне вікно
         SC::UI::MainWindow mainWindow(user, &formController);
+        // Закриваємо заставку після появи головного вікна
+        splash.finish(&mainWindow);
         mainWindow.show();
 
         return app.exec();

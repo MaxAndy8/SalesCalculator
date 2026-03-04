@@ -260,4 +260,8 @@
     <qresource prefix="/ForInformationRegisters">
         <file alias="InformReg16">icons/ForInformationRegisters/InformReg16.png</file>
     </qresource>
+    <qresource prefix="/SC_App">
+        <file alias="iconca_26">icons/SC_App/iconca_26.png</file>
+        <file alias="SplashScreen">icons/SC_App/SplashScreen.png</file>
+    </qresource>
 </RCC>
