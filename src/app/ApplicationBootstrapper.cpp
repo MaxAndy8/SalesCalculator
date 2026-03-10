@@ -17,6 +17,7 @@
 #include "infrastructure/auth/SqlAuthService.h"
 
 #include "infrastructure/catalogs/nomenclature/SqlNomenclatureQueryService.h"
+#include "infrastructure/catalogs/units/SqlUnitQueryService.h"
 
 namespace SC::App
 {
@@ -65,6 +66,8 @@ int ApplicationBootstrapper::run()
 
         formController.addSqlQueryService(
             new SC::Infrastructure::Catalogs::Nomenclature::SqlNomenclatureQueryService()); // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Nomenclature_ListForm)
+        formController.addSqlQueryService(
+            new SC::Infrastructure::Catalogs::Units::SqlUnitQueryService());
 
         //formController.addSqlQueryService(new SC::Infrastructure::Catalogs::Users::SqlUsersTreeQueryService());                 // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Users_ListForm)
         //formController.addSqlQueryService(new SC::Infrastructure::Catalogs::Units::SqlUnitsTreeQueryService());                 // для FormControllerImpl::getForm(SC::UI::FormType::Catalog_Units_ListForm)

@@ -12,6 +12,8 @@ set(SC_INFRASTRUCTURE_SOURCES
     auth/SqlAuthService.cpp
     catalogs/nomenclature/SqlNomenclatureQueryService.h
     catalogs/nomenclature/SqlNomenclatureQueryService.cpp
+    catalogs/units/SqlUnitQueryService.h
+    catalogs/units/SqlUnitQueryService.cpp
 )
 
 add_library(${SC_INFRASTRUCTURE_TARGET}

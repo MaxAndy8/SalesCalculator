@@ -18,7 +18,10 @@ class NomenclatureTreeModel final : public QAbstractItemModel
 public:
     enum Role
     {
-        IdRole = Qt::UserRole + 1
+        IdRole = Qt::UserRole + 1,
+        FolderRole,
+        NameRole,
+        CodeRole
     };
 
 public:

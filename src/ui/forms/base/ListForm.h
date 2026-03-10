@@ -19,6 +19,17 @@ class ListForm : public QWidget
     Q_OBJECT
 
 public:
+    enum class ToolbarProfile
+    {
+        CatalogGroupsAndItemsList,
+        CatalogGroupsAndItemsChoice,
+        CatalogGroupsAndItemsChoiceGroup,
+        CatalogItemsOnlyList,
+        CatalogItemsOnlyChoice,
+        DocumentList,
+        DocumentChoice
+    };
+
     explicit ListForm(QAbstractItemModel* model = nullptr, QWidget* parent = nullptr);
     ~ListForm() override;
 
@@ -30,8 +41,13 @@ protected:
     QLineEdit* searchLineEdit() const;
     void setTreeModel(QAbstractItemModel* model);
     QAbstractItemModel* treeModel() const;
+    void applyToolbarProfile(ToolbarProfile profile);
+    virtual void handleCreateItemRequested();
+    virtual void handleCreateFolderRequested();
+    virtual void handleEditRequested();
     virtual void handleDeleteRequested();
     virtual void handleRefreshRequested();
+    virtual void handleCopyRequested();
 
 protected:
     QAbstractItemModel* m_model;

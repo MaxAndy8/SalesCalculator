@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.nomenclature
     idrref bytea NOT NULL,
     version integer NOT NULL DEFAULT 0,
     marked boolean NOT NULL,
-    parent_idrref bytea NOT NULL,
+    parent_idrref bytea,
     folder boolean NOT NULL,
     code character varying(11) COLLATE pg_catalog."default" NOT NULL,
     description character varying(100) COLLATE pg_catalog."default" NOT NULL,
@@ -35,6 +35,8 @@ ALTER TABLE IF EXISTS public.nomenclature
     ALTER COLUMN idrref SET STORAGE PLAIN;
 ALTER TABLE IF EXISTS public.nomenclature
     ALTER COLUMN parent_idrref SET STORAGE PLAIN;
+ALTER TABLE IF EXISTS public.nomenclature
+    ALTER COLUMN parent_idrref DROP NOT NULL;
 ALTER TABLE IF EXISTS public.nomenclature
     ALTER COLUMN unit_idrref SET STORAGE PLAIN;
 ALTER TABLE IF EXISTS public.nomenclature

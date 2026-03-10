@@ -1,12 +1,14 @@
 #pragma once
 
 #include "application/catalogs/nomenclature/INomenclatureQueryService.h"
+#include "application/catalogs/nomenclature/INomenclatureCommandService.h"
 
 namespace SC::Infrastructure::Catalogs::Nomenclature
 {
 
 class SqlNomenclatureQueryService final
-    : public SC::Application::Catalogs::Nomenclature::INomenclatureQueryService
+    : public SC::Application::Catalogs::Nomenclature::INomenclatureQueryService,
+      public SC::Application::Catalogs::Nomenclature::INomenclatureCommandService
 {
 public:
     SC::UI::FormType formType() const override;
@@ -27,6 +29,14 @@ public:
         int limit,
         const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor,
         const QString& searchText) override;
+
+    std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureRecordDto> fetchForEdit(
+        const QByteArray& id) override;
+    QString getNextCode() override;
+    SC::Application::Catalogs::Nomenclature::NomenclatureSaveResult upsertItem(
+        const SC::Application::Catalogs::Nomenclature::NomenclatureItemUpsertCommand& command) override;
+    SC::Application::Catalogs::Nomenclature::NomenclatureSaveResult upsertGroup(
+        const SC::Application::Catalogs::Nomenclature::NomenclatureGroupUpsertCommand& command) override;
 };
 
 } // namespace SC::Infrastructure::Catalogs::Nomenclature

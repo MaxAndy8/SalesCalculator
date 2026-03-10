@@ -30,6 +30,7 @@ SelectDatabaseDialog::SelectDatabaseDialog(QWidget *parent)
     // 🔹 Показуємо лише рядки
     ui->tableViewDatabases->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewDatabases->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewDatabases->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     // 🔹 Прибираємо заголовки
     ui->tableViewDatabases->horizontalHeader()->hide();
@@ -55,6 +56,8 @@ SelectDatabaseDialog::SelectDatabaseDialog(QWidget *parent)
     connect(ui->btnRemove, &QPushButton::clicked, this, &SelectDatabaseDialog::removeDatabase);
     connect(ui->btnSelect, &QPushButton::clicked, this, &SelectDatabaseDialog::selectDatabase);
     connect(ui->btnCancel, &QPushButton::clicked, this, &QDialog::reject                     );
+    connect(ui->tableViewDatabases, &QTableView::doubleClicked, this, &SelectDatabaseDialog::selectDatabase);
+    connect(ui->tableViewDatabases, &QTableView::activated, this, &SelectDatabaseDialog::selectDatabase);
     connect(ui->comboTheme, qOverload<int>(&QComboBox::currentIndexChanged),
             this, &SelectDatabaseDialog::onThemeChanged);
 }

@@ -1,11 +1,13 @@
 #include "SqlNomenclatureQueryService.h"
 
+#include "core/AutoNumbering.h"
 #include "infrastructure/db/DbConnectionProvider.h"
 #include "infrastructure/db/UnitOfWork.h"
 
 #include <QDebug>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
+#include <QUuid>
 
 #include <algorithm>
 #include <stdexcept>
@@ -20,6 +22,15 @@ using Page = SC::Application::Catalogs::Nomenclature::NomenclatureTreePage;
 
 constexpr int kDefaultLimit = 150;
 constexpr int kMaxLimit = 500;
+/** Advisory lock key for generating unique nomenclature codes (prevents duplicate codes under concurrent writes). */
+constexpr qint64 kAdvisoryLockKeyNomenclatureCode = 100001;
+
+void acquireAdvisoryLockForNomenclatureCode(const QSqlDatabase& db)
+{
+    QSqlQuery q(db);
+    if (!q.exec(QStringLiteral("SELECT pg_advisory_xact_lock(%1)").arg(kAdvisoryLockKeyNomenclatureCode)))
+        throw std::runtime_error(q.lastError().text().toStdString());
+}
 
 int normalizeLimit(int limit)
 {
@@ -103,9 +114,7 @@ Page executePagedQuery(
             "WHERE n.parent_idrref = :parent_id "
             "  AND n.idrref <> :parent_id ");
     else
-        sql += QStringLiteral(
-            "WHERE n.parent_idrref IS NULL "
-            "   OR n.parent_idrref = n.idrref ");
+        sql += QStringLiteral("WHERE n.parent_idrref IS NULL ");
 
     appendCursorPredicate(sql, cursor);
     sql += QStringLiteral(
@@ -158,6 +167,33 @@ Page executePagedQuery(
     }
 
     return page;
+}
+
+using SaveStatus = SC::Application::Catalogs::Nomenclature::SaveStatus;
+using SaveResult = SC::Application::Catalogs::Nomenclature::NomenclatureSaveResult;
+using RecordDto = SC::Application::Catalogs::Nomenclature::NomenclatureRecordDto;
+using ItemCommand = SC::Application::Catalogs::Nomenclature::NomenclatureItemUpsertCommand;
+using GroupCommand = SC::Application::Catalogs::Nomenclature::NomenclatureGroupUpsertCommand;
+
+QByteArray newId()
+{
+    return QUuid::createUuid().toRfc4122();
+}
+
+SaveResult makeValidationError(const QString& message)
+{
+    SaveResult result;
+    result.status = SaveStatus::ValidationError;
+    result.message = message;
+    return result;
+}
+
+SaveResult makeError(const QString& message)
+{
+    SaveResult result;
+    result.status = SaveStatus::Error;
+    result.message = message;
+    return result;
 }
 } // namespace
 
@@ -292,6 +328,268 @@ SqlNomenclatureQueryService::fetchChildrenPage(
     const QString& searchText)
 {
     return executePagedQuery(parentId, limit, cursor, searchText);
+}
+
+std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureRecordDto>
+SqlNomenclatureQueryService::fetchForEdit(const QByteArray& id)
+{
+    if (id.isEmpty())
+        return std::nullopt;
+
+    auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
+    QSqlQuery query(db);
+    query.prepare(QStringLiteral(
+        "SELECT n.idrref, "
+        "       n.parent_idrref, "
+        "       COALESCE(p.description, '') AS parent_display, "
+        "       n.version, "
+        "       n.folder, "
+        "       n.code, "
+        "       n.description, "
+        "       COALESCE(n.full_description, ''), "
+        "       COALESCE(n.article, ''), "
+        "       n.unit_idrref, "
+        "       COALESCE(u.description, '') AS unit_display, "
+        "       COALESCE(n.service, false) "
+        "FROM nomenclature n "
+        "LEFT JOIN nomenclature p ON p.idrref = n.parent_idrref "
+        "LEFT JOIN units u ON u.idrref = n.unit_idrref "
+        "WHERE n.idrref = :id"));
+    query.bindValue(":id", id);
+
+    if (!query.exec())
+        throw std::runtime_error(query.lastError().text().toStdString());
+
+    if (!query.next())
+        return std::nullopt;
+
+    RecordDto dto;
+    dto.id = query.value(0).toByteArray();
+    dto.parentId = query.value(1).toByteArray();
+    dto.parentDisplay = query.value(2).toString().trimmed();
+    dto.version = query.value(3).toInt();
+    dto.folder = query.value(4).toBool();
+    dto.code = query.value(5).toString();
+    dto.name = query.value(6).toString();
+    dto.fullDescription = query.value(7).toString();
+    dto.article = query.value(8).toString();
+    if (!query.value(9).isNull())
+        dto.unitId = query.value(9).toByteArray();
+    dto.unitDisplay = query.value(10).toString().trimmed();
+    dto.service = query.value(11).toBool();
+
+    return dto;
+}
+
+QString SqlNomenclatureQueryService::getNextCode()
+{
+    constexpr int kCodeLength = 11;
+    auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
+    QSqlQuery query(db);
+    query.prepare(QStringLiteral(
+        "SELECT n.code FROM nomenclature n ORDER BY n.code DESC LIMIT 1"));
+
+    if (!query.exec())
+        throw std::runtime_error(query.lastError().text().toStdString());
+
+    QString maxCode;
+    if (query.next())
+        maxCode = query.value(0).toString().trimmed();
+    return SC::Core::nextCodeFromMax(maxCode, kCodeLength);
+}
+
+SC::Application::Catalogs::Nomenclature::NomenclatureSaveResult
+SqlNomenclatureQueryService::upsertItem(const ItemCommand& command)
+{
+    if (command.name.trimmed().isEmpty())
+        return makeValidationError(QStringLiteral("Name is required."));
+    if (!command.unitId.has_value() || command.unitId->isEmpty())
+        return makeValidationError(QStringLiteral("Unit is required for item."));
+
+    QString code = command.code.trimmed();
+    const bool needGeneratedCode = code.isEmpty();
+
+    const bool isCreate = !command.id.has_value();
+    const QByteArray id = isCreate ? newId() : *command.id;
+    const int expectedVersion = command.expectedVersion.value_or(0);
+    auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
+    QSqlQuery query(db);
+
+    try
+    {
+        SC::Infrastructure::Persistence::UnitOfWork::begin();
+        if (needGeneratedCode)
+        {
+            acquireAdvisoryLockForNomenclatureCode(db);
+            code = getNextCode();
+        }
+        if (isCreate)
+        {
+            query.prepare(QStringLiteral(
+                "INSERT INTO nomenclature "
+                "(idrref, version, marked, parent_idrref, folder, code, description, full_description, article, unit_idrref, service) "
+                "VALUES (:id, 0, false, :parent_id, false, :code, :name, :full_description, :article, :unit_id, :service)"));
+            query.bindValue(":id", id);
+            query.bindValue(":parent_id", command.parentId.isEmpty() ? QVariant() : QVariant(command.parentId));
+            query.bindValue(":code", code);
+            query.bindValue(":name", command.name.trimmed());
+            query.bindValue(":full_description", command.fullDescription.trimmed());
+            query.bindValue(":article", command.article.trimmed().isEmpty() ? QVariant() : QVariant(command.article.trimmed()));
+            query.bindValue(":unit_id", *command.unitId);
+            query.bindValue(":service", command.service);
+
+            if (!query.exec())
+                throw std::runtime_error(query.lastError().text().toStdString());
+
+            SC::Infrastructure::Persistence::UnitOfWork::commit();
+            SaveResult result;
+            result.status = SaveStatus::Success;
+            result.id = id;
+            result.newVersion = 0;
+            if (needGeneratedCode)
+                result.assignedCode = code;
+            return result;
+        }
+
+        query.prepare(QStringLiteral(
+            "UPDATE nomenclature "
+            "SET parent_idrref = :parent_id, "
+            "    code = :code, "
+            "    description = :name, "
+            "    full_description = :full_description, "
+            "    article = :article, "
+            "    unit_idrref = :unit_id, "
+            "    service = :service, "
+            "    version = version + 1 "
+            "WHERE idrref = :id AND folder = false AND version = :expected_version"));
+        query.bindValue(":parent_id", command.parentId.isEmpty() ? QVariant() : QVariant(command.parentId));
+        query.bindValue(":code", code);
+        query.bindValue(":name", command.name.trimmed());
+        query.bindValue(":full_description", command.fullDescription.trimmed());
+        query.bindValue(":article", command.article.trimmed().isEmpty() ? QVariant() : QVariant(command.article.trimmed()));
+        query.bindValue(":unit_id", *command.unitId);
+        query.bindValue(":service", command.service);
+        query.bindValue(":id", id);
+        query.bindValue(":expected_version", expectedVersion);
+
+        if (!query.exec())
+            throw std::runtime_error(query.lastError().text().toStdString());
+
+        if (query.numRowsAffected() == 0)
+        {
+            SC::Infrastructure::Persistence::UnitOfWork::rollback();
+            SaveResult conflict;
+            conflict.status = SaveStatus::ConcurrencyConflict;
+            conflict.id = id;
+            conflict.message = QStringLiteral("Record has been changed by another user.");
+            return conflict;
+        }
+
+        SC::Infrastructure::Persistence::UnitOfWork::commit();
+        SaveResult ok;
+        ok.status = SaveStatus::Success;
+        ok.id = id;
+        ok.newVersion = expectedVersion + 1;
+        if (needGeneratedCode)
+            ok.assignedCode = code;
+        return ok;
+    }
+    catch (const std::exception& ex)
+    {
+        SC::Infrastructure::Persistence::UnitOfWork::rollback();
+        return makeError(QString::fromUtf8(ex.what()));
+    }
+}
+
+SC::Application::Catalogs::Nomenclature::NomenclatureSaveResult
+SqlNomenclatureQueryService::upsertGroup(const GroupCommand& command)
+{
+    if (command.name.trimmed().isEmpty())
+        return makeValidationError(QStringLiteral("Name is required."));
+
+    QString code = command.code.trimmed();
+    const bool needGeneratedCode = code.isEmpty();
+
+    const bool isCreate = !command.id.has_value();
+    const QByteArray id = isCreate ? newId() : *command.id;
+    const int expectedVersion = command.expectedVersion.value_or(0);
+    auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
+    QSqlQuery query(db);
+
+    try
+    {
+        SC::Infrastructure::Persistence::UnitOfWork::begin();
+        if (needGeneratedCode)
+        {
+            acquireAdvisoryLockForNomenclatureCode(db);
+            code = getNextCode();
+        }
+        if (isCreate)
+        {
+            query.prepare(QStringLiteral(
+                "INSERT INTO nomenclature "
+                "(idrref, version, marked, parent_idrref, folder, code, description, full_description, article, unit_idrref, service) "
+                "VALUES (:id, 0, false, :parent_id, true, :code, :name, :full_description, NULL, NULL, NULL)"));
+            query.bindValue(":id", id);
+            query.bindValue(":parent_id", command.parentId.has_value() ? QVariant(*command.parentId) : QVariant());
+            query.bindValue(":code", code);
+            query.bindValue(":name", command.name.trimmed());
+            query.bindValue(":full_description", command.fullDescription.trimmed());
+            if (!query.exec())
+                throw std::runtime_error(query.lastError().text().toStdString());
+
+            SC::Infrastructure::Persistence::UnitOfWork::commit();
+            SaveResult result;
+            result.status = SaveStatus::Success;
+            result.id = id;
+            result.newVersion = 0;
+            if (needGeneratedCode)
+                result.assignedCode = code;
+            return result;
+        }
+
+        query.prepare(QStringLiteral(
+            "UPDATE nomenclature "
+            "SET parent_idrref = :parent_id, "
+            "    code = :code, "
+            "    description = :name, "
+            "    full_description = :full_description, "
+            "    version = version + 1 "
+            "WHERE idrref = :id AND folder = true AND version = :expected_version"));
+        query.bindValue(":parent_id", command.parentId.has_value() ? QVariant(*command.parentId) : QVariant());
+        query.bindValue(":code", code);
+        query.bindValue(":name", command.name.trimmed());
+        query.bindValue(":full_description", command.fullDescription.trimmed());
+        query.bindValue(":id", id);
+        query.bindValue(":expected_version", expectedVersion);
+
+        if (!query.exec())
+            throw std::runtime_error(query.lastError().text().toStdString());
+
+        if (query.numRowsAffected() == 0)
+        {
+            SC::Infrastructure::Persistence::UnitOfWork::rollback();
+            SaveResult conflict;
+            conflict.status = SaveStatus::ConcurrencyConflict;
+            conflict.id = id;
+            conflict.message = QStringLiteral("Record has been changed by another user.");
+            return conflict;
+        }
+
+        SC::Infrastructure::Persistence::UnitOfWork::commit();
+        SaveResult ok;
+        ok.status = SaveStatus::Success;
+        ok.id = id;
+        ok.newVersion = expectedVersion + 1;
+        if (needGeneratedCode)
+            ok.assignedCode = code;
+        return ok;
+    }
+    catch (const std::exception& ex)
+    {
+        SC::Infrastructure::Persistence::UnitOfWork::rollback();
+        return makeError(QString::fromUtf8(ex.what()));
+    }
 }
 
 } // namespace SC::Infrastructure::Catalogs::Nomenclature

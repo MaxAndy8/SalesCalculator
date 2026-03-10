@@ -87,6 +87,12 @@ QVariant NomenclatureTreeModel::data(const QModelIndex& index, int role) const
         return dataDecoration(index);
     case IdRole:
         return node->dto.id;
+    case FolderRole:
+        return node->dto.folder;
+    case NameRole:
+        return node->dto.name;
+    case CodeRole:
+        return node->dto.code;
     default:
         return {};
     }

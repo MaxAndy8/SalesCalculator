@@ -16,7 +16,11 @@ set(SC_APPLICATION_SOURCES
     auth/AuthenticatedUser.h
     auth/AuthenticatedUser.cpp
     auth/IAuthService.h
+    forms/ReferenceFieldPolicy.h
     catalogs/nomenclature/INomenclatureQueryService.h
+    catalogs/nomenclature/INomenclatureCommandService.h
+    catalogs/units/IUnitQueryService.h
+    catalogs/units/IUnitCommandService.h
 )
 
 add_library(${SC_APPLICATION_TARGET}
