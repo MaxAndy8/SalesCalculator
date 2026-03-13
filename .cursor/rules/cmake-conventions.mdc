@@ -1,0 +1,10 @@
+---
+description: Конвенції CMake у проєкті
+globs: ["**/CMakeLists.txt", "**/*.cmake"]
+alwaysApply: false
+---
+
+# CMake
+
+- C++20, Qt 6. Порядок підпроєктів у кореневому CMakeLists.txt: domain → application → infrastructure → core → ui_resources → ui_i18n → ui → app.
+- Опція `SC_ENABLE_TESTS`; тести в окремому `add_subdirectory(tests)`.

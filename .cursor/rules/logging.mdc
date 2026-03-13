@@ -1,0 +1,20 @@
+---
+description: Обов'язкове логування через SC::Core::Logger
+globs: ["src/**/*.cpp", "src/**/*.h"]
+alwaysApply: false
+---
+
+# Обов'язкове логування
+
+- Використовувати лише **SC::Core::Logger** (`src/core/Logger.h`): `Logger::info()`, `Logger::warning()`, `Logger::error()`. У .cpp: `#include "core/Logger.h"`.
+- **Обов'язково логувати:** помилки (error), невдалі операції (error/warning), старт/завершення застосунку та ключові дії користувача (info).
+- У блоці `catch` не залишати порожньо: завжди викликати `Logger::error(...)` (і за потреби повторно кинути виключення).
+- Повідомлення змістовні; для помилок включати контекст, наприклад: `Logger::error(QStringLiteral("... %1").arg(detail))`.
+
+Приклад:
+```cpp
+} catch (const std::exception& ex) {
+    SC::Core::Logger::error(QStringLiteral("Operation failed: %1").arg(ex.what()));
+    throw;
+}
+```

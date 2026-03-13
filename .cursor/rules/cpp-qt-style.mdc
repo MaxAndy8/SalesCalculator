@@ -1,0 +1,23 @@
+---
+description: Стиль C++ та Qt у проєкті
+globs: ["src/**/*.cpp", "src/**/*.h"]
+alwaysApply: false
+---
+
+# Стиль C++ та Qt
+
+- **Include guards:** тільки `#pragma once`.
+- **Namespaces:** префікс `SC::`, вкладені за шарами: `SC::Application::Auth`, `SC::UI::Forms::Base`, `SC::Infrastructure::DB`, `SC::App`, `SC::Core`. Закривати коментарем `} // namespace SC::...`.
+- **Члени класу:** префікс `m_` для полів (наприклад `m_version`, `m_model`).
+- **Класи:** використовувати `final` для листових класів; явно видаляти копіювання де потрібно: `ClassName(const ClassName&) = delete; ClassName& operator=(const ClassName&) = delete;`.
+- **Інтерфейси:** в Application, віртуальний деструктор за замовчуванням: `virtual ~IInterface() = default;`.
+- **Qt:** використовувати Q_OBJECT, slots/signals де потрібно; у .h — forward declarations для Qt-типів де можливо.
+
+Приклад інтерфейсу (Application):
+```cpp
+class IQueryService {
+public:
+    virtual ~IQueryService() = default;
+    virtual SC::UI::FormType formType() const = 0;
+};
+```

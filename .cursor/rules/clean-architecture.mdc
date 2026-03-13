@@ -1,0 +1,21 @@
+---
+description: Clean Architecture та напрям залежностей між шарами
+globs: ["src/**/*.cpp", "src/**/*.h"]
+alwaysApply: false
+---
+
+# Clean Architecture та залежності
+
+- **Напрям залежностей:** зовні всередину. UI та Infrastructure залежать від Application; UI не залежить від Infrastructure (реалізації підставляються в точці збирання — App).
+- **Шари:** Domain (бізнес-правила) → Application (порти, DTO, сценарії) → Infrastructure (реалізації портів, БД) та Core (логер, утиліти), UI (вікна, форми), App (composition root, main).
+- **Інтерфейси** оголошуються в Application; **реалізації** — в Infrastructure; **збирання залежностей** — в App (composition root).
+
+```mermaid
+flowchart LR
+  UI[UI] --> AppLayer[Application]
+  Infra[Infrastructure] --> AppLayer
+  AppLayer --> Domain[Domain]
+  Core[Core] --> AppLayer
+  App[App] --> UI
+  App --> Infra
+```

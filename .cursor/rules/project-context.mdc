@@ -1,0 +1,11 @@
+---
+description: Загальний контекст проєкту SalesCalculator
+alwaysApply: true
+---
+
+# Контекст проєкту SalesCalculator
+
+- **Що це:** десктопний застосунок на Qt 6 (C++20), PostgreSQL, архітектура за принципами Clean Architecture. Облікова система продажів.
+- **Стек:** CMake 3.21+, Qt 6.5+ (Core, Widgets, Sql, LinguistTools), C++20.
+- **Мова коментарів у коді:** українська.
+- **Структура каталогів:** `src/domain`, `src/application`, `src/infrastructure`, `src/core`, `src/ui`, `src/app`, `sql/`.

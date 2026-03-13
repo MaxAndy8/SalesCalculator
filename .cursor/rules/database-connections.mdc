@@ -1,0 +1,13 @@
+---
+description: З'єднання з БД у кожному потоці через DbConnectionProvider
+globs: ["src/**/*.cpp", "src/**/*.h"]
+alwaysApply: false
+---
+
+# З'єднання з БД у кожному потоці
+
+- Єдиний спосіб отримати з'єднання — **SC::Infrastructure::DB::DbConnectionProvider::current()**. Підключати заголовок провайдера (шлях залежить від модуля, наприклад `infrastructure/db/DbConnectionProvider.h`).
+- **Один потік — одне з'єднання:** ім'я з'єднання зберігається в `thread_local`; при першому виклику `current()` у потоці створюється з'єднання, при наступних повертається існуюче. Не зберігати `QSqlDatabase` у полях класу й не передавати між потоками.
+- Отримувати з'єднання в тому ж потоці, де виконується запит: у методі сервісу `auto db = DbConnectionProvider::current();` і передавати `db` у `QSqlQuery(query(db))`.
+- **Ініціалізація:** один раз після вибору БД — `DbConnectionProvider::initialize(DatabaseConnectionInfo)`. З'єднання для потоку створюються ліниво при першому `current()`.
+- **Закриття:** для поточного потоку — `closeCurrentThreadConnection()`; при завершенні застосунку — `shutdown()`.

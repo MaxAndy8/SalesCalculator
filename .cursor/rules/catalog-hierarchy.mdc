@@ -1,0 +1,20 @@
+---
+description: Ієрархія довідників, поля БД та варіанти форм
+globs: ["src/**/*.cpp", "src/**/*.h", "sql/**/*.sql"]
+alwaysApply: false
+---
+
+# Ієрархія довідників та поля БД
+
+**Три види довідників:** (1) без ієрархії (плоский); (2) ієрархія груп та елементів — є поле `folder`; (3) ієрархія елементів — лише `parent_idrref`, без `folder`.
+
+- **Плоский** (наприклад units): немає `parent_idrref`, `folder`. Поля: `idrref`, `version`, `marked`, `code`, `description` та специфічні.
+- **Ієрархія груп та елементів** (наприклад nomenclature): `parent_idrref` (nullable), `folder` (boolean). `folder = true` — група, `false` — елемент. У папок поля «тільки для елементів» — NULL (тригер). Унікальність у межах батька. Кореневі: `parent_idrref IS NULL`; дочірні: `parent_idrref = :parent_id`; сортування `folder DESC, code ASC`.
+- **Ієрархія елементів:** лише `parent_idrref`. Усі рядки — елементи; дерево тільки за батьком. Кореневі/дочірні — аналогічно.
+
+**Зв'язок у коді:** DTO вузла — `id`, `parentId` (optional), для «групи+елементи» також `folder`. Сервіси: `fetchRootPage` / `fetchChildrenPage`. Нові довідники: групи+елементи — `parent_idrref` + `folder` + тригер; лише елементи — лише `parent_idrref`; плоский — без обох.
+
+**Варіанти форм:**
+- **Плоский:** ListForm (`CatalogItemsOnlyList`), ItemForm, ChoiceForm (таблиця). FormType: ListForm, ItemForm, ChoiceForm.
+- **Групи та елементи:** ListForm (`CatalogGroupsAndItemsList`), GroupForm, ItemForm, ChoiceForm (дерево; `AllowedNodeKinds`: ItemsOnly / ItemsAndFolders), **GroupChoiceForm** — тільки записи де `folder = true` (поле «батьківська група»). FormType: ListForm, GroupForm, ItemForm, ChoiceForm, GroupChoiceForm.
+- **Ієрархія елементів:** ListForm (`CatalogItemsOnlyList`, дерево), ItemForm (з полем батька), ChoiceForm. Без GroupForm і GroupChoiceForm.
