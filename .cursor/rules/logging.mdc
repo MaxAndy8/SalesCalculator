@@ -11,6 +11,22 @@ alwaysApply: false
 - У блоці `catch` не залишати порожньо: завжди викликати `Logger::error(...)` (і за потреби повторно кинути виключення).
 - Повідомлення змістовні; для помилок включати контекст, наприклад: `Logger::error(QStringLiteral("... %1").arg(detail))`.
 
+## Файл та рядок
+
+- **Файл і номер рядка:** усі виклики логування (`info` / `warning` / `error`) повинні містити в повідомленні ім'я файлу та номер рядка, де виконано логування. Рекомендований формат: `"[file.cpp:123] Опис події/помилки..."`.
+- **Макроси-обгортки:** у робочому коді замість прямих викликів `Logger::info/warning/error` рекомендується використовувати макроси, які автоматично додають `__FILE__` та `__LINE__` до повідомлення (наприклад, `SC_LOG_ERROR(msg)`, `SC_LOG_WARNING(msg)`, `SC_LOG_INFO(msg)`).
+- **Приклад для помилки в catch-блоці:**
+
+```cpp
+} catch (const std::exception& ex) {
+    SC::Core::Logger::error(QStringLiteral("[%1:%2] Operation failed: %3")
+                                .arg(QStringLiteral(__FILE__))
+                                .arg(__LINE__)
+                                .arg(ex.what()));
+    throw;
+}
+```
+
 Приклад:
 ```cpp
 } catch (const std::exception& ex) {

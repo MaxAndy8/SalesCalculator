@@ -1,6 +1,6 @@
 ---
 description: Конвенції для SQL-скриптів у sql/
-globs: ["sql/**/*.sql"]
+globs: ["sql/**/*.sql", "src/**/*.cpp", "src/**/*.h"]
 alwaysApply: false
 ---
 
