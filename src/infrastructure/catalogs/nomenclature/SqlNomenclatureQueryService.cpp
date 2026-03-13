@@ -1,5 +1,6 @@
 #include "SqlNomenclatureQueryService.h"
 
+#include "application/forms/ReferenceFieldPolicy.h"
 #include "core/AutoNumbering.h"
 #include "infrastructure/db/DbConnectionProvider.h"
 #include "infrastructure/db/UnitOfWork.h"
@@ -328,6 +329,60 @@ SqlNomenclatureQueryService::fetchChildrenPage(
     const QString& searchText)
 {
     return executePagedQuery(parentId, limit, cursor, searchText);
+}
+
+QVector<SC::Application::Forms::AutocompleteEntry>
+SqlNomenclatureQueryService::searchForAutocomplete(
+    const QString& searchText,
+    SC::Application::Forms::AllowedNodeKinds allowedKinds,
+    int limit)
+{
+    using SC::Application::Forms::AllowedNodeKinds;
+    using SC::Application::Forms::AutocompleteEntry;
+
+    const QString trimmed = searchText.trimmed();
+    if (trimmed.isEmpty())
+        return {};
+
+    const int safeLimit = std::max(1, std::min(limit, 50));
+    auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
+    QSqlQuery query(db);
+
+    // LIKE по description, code, article та barcode (через nomenclature_barcodes); DISTINCT щоб не дублювати рядки.
+    QString sql = QStringLiteral(
+        "SELECT DISTINCT n.idrref, n.folder, n.description, n.code "
+        "FROM nomenclature n "
+        "LEFT JOIN nomenclature_barcodes nb ON nb.nomenclature_idrref = n.idrref AND nb.barcode ILIKE :pat "
+        "WHERE ( "
+        "  n.description ILIKE :pat OR n.code ILIKE :pat OR COALESCE(n.article, '') ILIKE :pat "
+        "  OR nb.nomenclature_idrref IS NOT NULL "
+        ") ");
+    if (allowedKinds == AllowedNodeKinds::FoldersOnly)
+        sql += QStringLiteral("AND n.folder = true ");
+    else if (allowedKinds == AllowedNodeKinds::ItemsOnly)
+        sql += QStringLiteral("AND n.folder = false ");
+    sql += QStringLiteral("ORDER BY n.code ASC LIMIT :limit");
+
+    query.prepare(sql);
+    query.bindValue(":pat", QStringLiteral("%%1%").arg(trimmed));
+    query.bindValue(":limit", safeLimit);
+
+    if (!query.exec())
+        throw std::runtime_error(query.lastError().text().toStdString());
+
+    QVector<AutocompleteEntry> result;
+    while (query.next())
+    {
+        AutocompleteEntry entry;
+        entry.id = query.value(0).toByteArray();
+        const bool folder = query.value(1).toBool();
+        entry.nodeKind = folder ? AllowedNodeKinds::FoldersOnly : AllowedNodeKinds::ItemsOnly;
+        const QString desc = query.value(2).toString().trimmed();
+        const QString code = query.value(3).toString().trimmed();
+        entry.displayText = desc + QStringLiteral(" ") + code;
+        result.append(entry);
+    }
+    return result;
 }
 
 std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureRecordDto>

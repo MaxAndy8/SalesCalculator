@@ -1,9 +1,11 @@
 #pragma once
 
 #include "application/catalogs/ICatalogQueryService.h"
+#include "application/forms/ReferenceFieldPolicy.h"
 
 #include <QByteArray>
 #include <QString>
+#include <QVector>
 
 #include <optional>
 #include <vector>
@@ -62,6 +64,12 @@ public:
         int limit,
         const std::optional<NomenclatureTreeCursor>& cursor,
         const QString& searchText = QString()) = 0;
+
+    /// Пошук для автозаповнення: LIKE по description, code, article, barcode; фільтр за folder залежно від allowedKinds.
+    virtual QVector<SC::Application::Forms::AutocompleteEntry> searchForAutocomplete(
+        const QString& searchText,
+        SC::Application::Forms::AllowedNodeKinds allowedKinds,
+        int limit) = 0;
 };
 
 } // namespace SC::Application::Catalogs::Nomenclature

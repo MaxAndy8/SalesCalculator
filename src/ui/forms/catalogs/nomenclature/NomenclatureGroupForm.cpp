@@ -158,6 +158,15 @@ void NomenclatureGroupForm::on_cancelButton_clicked()
 
 void NomenclatureGroupForm::connectReferenceWidgets()
 {
+    // Джерело автозаповнення для батьківської групи (тільки папки).
+    if (m_queryService != nullptr)
+    {
+        ui->parentReferenceWidget->setAutocompleteSource(
+            [this](const QString& search, int limit) {
+                return m_queryService->searchForAutocomplete(search, AllowedNodeKinds::FoldersOnly, limit);
+            });
+    }
+
     connect(ui->parentReferenceWidget, &SC::UI::Widgets::UniversalReferenceWidget::selectRequested,
             this, [this](SC::UI::Widgets::UniversalReferenceWidget*, int, const QString&, AllowedNodeKinds)
             {

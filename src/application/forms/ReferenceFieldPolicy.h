@@ -1,5 +1,8 @@
 #pragma once
 
+#include <QByteArray>
+#include <QString>
+
 namespace SC::Application::Forms
 {
 
@@ -10,6 +13,14 @@ enum class AllowedNodeKinds
     ItemsOnly = 0,
     FoldersOnly = 1,
     ItemsAndFolders = 2
+};
+
+// Один варіант для автозаповнення поля посилання (довідник/документ).
+struct AutocompleteEntry
+{
+    QByteArray id;
+    QString displayText;
+    AllowedNodeKinds nodeKind = AllowedNodeKinds::ItemsOnly;
 };
 
 } // namespace SC::Application::Forms

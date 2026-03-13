@@ -15,6 +15,10 @@ public:
     std::vector<SC::Application::Catalogs::Units::UnitDto> fetchAll(
         const QString& searchText = QString()) override;
 
+    QVector<SC::Application::Forms::AutocompleteEntry> searchForAutocomplete(
+        const QString& searchText,
+        int limit) override;
+
     std::optional<SC::Application::Catalogs::Units::UnitRecordDto> fetchForEdit(
         const QByteArray& id) override;
     SC::Application::Catalogs::Units::UnitSaveResult upsert(

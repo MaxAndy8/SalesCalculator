@@ -1,5 +1,6 @@
 #include "SqlUnitQueryService.h"
 
+#include "application/forms/ReferenceFieldPolicy.h"
 #include "infrastructure/db/DbConnectionProvider.h"
 #include "infrastructure/db/UnitOfWork.h"
 
@@ -65,6 +66,45 @@ std::vector<SC::Application::Catalogs::Units::UnitDto> SqlUnitQueryService::fetc
         result.push_back(std::move(dto));
     }
 
+    return result;
+}
+
+QVector<SC::Application::Forms::AutocompleteEntry> SqlUnitQueryService::searchForAutocomplete(
+    const QString& searchText,
+    int limit)
+{
+    using SC::Application::Forms::AutocompleteEntry;
+    using SC::Application::Forms::AllowedNodeKinds;
+
+    const QString trimmed = searchText.trimmed();
+    if (trimmed.isEmpty())
+        return {};
+
+    const int safeLimit = std::max(1, std::min(limit, 50));
+    auto db = SC::Infrastructure::DB::DbConnectionProvider::current();
+    QSqlQuery query(db);
+
+    query.prepare(QStringLiteral(
+        "SELECT idrref, code, description FROM units "
+        "WHERE code ILIKE :search OR description ILIKE :search "
+        "ORDER BY code ASC LIMIT :limit"));
+    query.bindValue(QStringLiteral(":search"), QStringLiteral("%%1%").arg(trimmed));
+    query.bindValue(QStringLiteral(":limit"), safeLimit);
+
+    if (!query.exec())
+        throw std::runtime_error(query.lastError().text().toStdString());
+
+    QVector<AutocompleteEntry> result;
+    while (query.next())
+    {
+        AutocompleteEntry entry;
+        entry.id = query.value(0).toByteArray();
+        entry.nodeKind = AllowedNodeKinds::ItemsOnly;
+        const QString code = query.value(1).toString().trimmed();
+        const QString description = query.value(2).toString().trimmed();
+        entry.displayText = description + QStringLiteral(" ") + code;
+        result.append(entry);
+    }
     return result;
 }
 

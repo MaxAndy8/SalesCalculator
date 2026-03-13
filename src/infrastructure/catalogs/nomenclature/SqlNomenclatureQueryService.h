@@ -30,6 +30,11 @@ public:
         const std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureTreeCursor>& cursor,
         const QString& searchText) override;
 
+    QVector<SC::Application::Forms::AutocompleteEntry> searchForAutocomplete(
+        const QString& searchText,
+        SC::Application::Forms::AllowedNodeKinds allowedKinds,
+        int limit) override;
+
     std::optional<SC::Application::Catalogs::Nomenclature::NomenclatureRecordDto> fetchForEdit(
         const QByteArray& id) override;
     QString getNextCode() override;

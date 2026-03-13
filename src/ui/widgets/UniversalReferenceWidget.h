@@ -3,9 +3,14 @@
 #include "application/forms/ReferenceFieldPolicy.h"
 
 #include <QByteArray>
+#include <QVector>
 #include <QWidget>
 
+#include <functional>
+
 QT_BEGIN_NAMESPACE
+class QCompleter;
+class QTimer;
 namespace Ui { class UniversalReferenceWidget; }
 QT_END_NAMESPACE
 
@@ -21,6 +26,9 @@ class UniversalReferenceWidget final : public QWidget
     Q_PROPERTY(int allowedNodeKinds READ allowedNodeKinds WRITE setAllowedNodeKinds)
 
 public:
+    using AutocompleteSource =
+        std::function<QVector<SC::Application::Forms::AutocompleteEntry>(QString search, int limit)>;
+
     explicit UniversalReferenceWidget(QWidget* parent = nullptr);
     ~UniversalReferenceWidget();
 
@@ -45,6 +53,9 @@ public:
         const QString& displayText,
         SC::Application::Forms::AllowedNodeKinds nodeKind);
 
+    /// Джерело варіантів для автозаповнення; якщо не встановлене, поле лишається лише для вибору кнопкою.
+    void setAutocompleteSource(AutocompleteSource source);
+
 signals:
     void selectRequested(
         SC::UI::Widgets::UniversalReferenceWidget* sender,
@@ -57,6 +68,9 @@ signals:
 
 private:
     void emitSelectRequested();
+    void onLineEditTextChanged(const QString& text);
+    void onDebounceTimerFired();
+    void onCompleterActivated(const QModelIndex& index);
 
 private:
     Ui::UniversalReferenceWidget* ui;
@@ -67,6 +81,12 @@ private:
     bool m_required = false;
     SC::Application::Forms::AllowedNodeKinds m_allowedKinds =
         SC::Application::Forms::AllowedNodeKinds::ItemsAndFolders;
+
+    AutocompleteSource m_autocompleteSource;
+    QTimer* m_debounceTimer = nullptr;
+    QCompleter* m_completer = nullptr;
+    QVector<SC::Application::Forms::AutocompleteEntry> m_autocompleteEntries;
+    bool m_suppressAutocomplete = false;
 };
 
 } // namespace SC::UI::Widgets

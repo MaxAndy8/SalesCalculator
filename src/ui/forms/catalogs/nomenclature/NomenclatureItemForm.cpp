@@ -166,6 +166,22 @@ void NomenclatureItemForm::on_cancelButton_clicked()
 
 void NomenclatureItemForm::connectReferenceWidgets()
 {
+    // Джерела автозаповнення для вводу по рядку (батьківська група — тільки папки; одиниця — елементи).
+    if (m_queryService != nullptr)
+    {
+        ui->parentReferenceWidget->setAutocompleteSource(
+            [this](const QString& search, int limit) {
+                return m_queryService->searchForAutocomplete(search, AllowedNodeKinds::FoldersOnly, limit);
+            });
+    }
+    if (m_unitQueryService != nullptr)
+    {
+        ui->unitReferenceWidget->setAutocompleteSource(
+            [this](const QString& search, int limit) {
+                return m_unitQueryService->searchForAutocomplete(search, limit);
+            });
+    }
+
     connect(ui->parentReferenceWidget, &SC::UI::Widgets::UniversalReferenceWidget::selectRequested,
             this, [this](SC::UI::Widgets::UniversalReferenceWidget*, int choiceFormType, const QString&,
                          AllowedNodeKinds)
