@@ -1,0 +1,52 @@
+---
+description: Використання UniversalReferenceWidget для полів посилань на довідники та документи
+globs: ["src/ui/**/*.cpp", "src/ui/**/*.h"]
+alwaysApply: false
+---
+
+# UniversalReferenceWidget — правило використання
+
+**Призначення:** універсальний віджет для поля посилання на елемент довідника або документу. Відображає текст обраного значення (lineEdit) та кнопки: вибір (…), очистити, відкрити форму елемента. Підтримує опційне автозаповнення по введенню тексту.
+
+## Налаштування віджета
+
+- **referenceKey** — ідентифікатор поля (наприклад для логів); задається в .ui або в коді.
+- **choiceFormType** — значення `FormType` форми вибору (наприклад `Catalog_Nomenclature_GroupChoiceForm`, `Catalog_Units_ChoiceForm`). Передається в сигналі `selectRequested`, щоб батьківська форма відкрила потрібну форму.
+- **allowedNodeKinds** — які вузли приймаються: `ItemsOnly`, `FoldersOnly`, `ItemsAndFolders` (з `SC::Application::Forms::AllowedNodeKinds`). Має узгоджуватися з типом форми вибору та з методом пошуку для автозаповнення (наприклад для батьківської групи — `FoldersOnly`).
+
+## Підключення в батьківській формі
+
+1. **Сигнал selectRequested** — підключити до відкриття форми вибору (ChoiceForm / GroupChoiceForm). У слоті перевірити `choiceFormType` і викликати відповідний метод відкриття форми; при прийнятті вибору викликати `applySelection(id, displayText, nodeKind)` на відповідному віджеті.
+2. **Сигнал openRequested** — підключити до відкриття форми елемента (ItemForm / GroupForm) для редагування обраного `referenceId()`.
+3. **Автозаповнення:** якщо потрібен ввід по рядку, у формі (наприклад у `connectReferenceWidgets()`) викликати `setAutocompleteSource` і передати callback, який викликає відповідний сервіс:
+   - для довідників з ієрархією (номенклатура): `m_queryService->searchForAutocomplete(search, allowedKinds, limit)` з потрібним `allowedKinds` (FoldersOnly / ItemsOnly / ItemsAndFolders);
+   - для плоского довідника (одиниці): `m_unitQueryService->searchForAutocomplete(search, limit)`.
+   Джерело не встановлювати — поле лишається тільки для вибору кнопкою (lineEdit read-only).
+
+## Поведінка автозаповнення
+
+- Список показується лише після введення символів користувачем і паузи (debounce ~300 мс); при програмному заповненні поля (applySelection / clearValue) popup не показується.
+- Максимум 10 рядків у списку; формат рядка для довідників — «description code», для документів — назва, номер, дата (коли реалізовано).
+- Клавіатура: стрілки вгору/вниз, Enter для вибору.
+
+## Типи з application/forms
+
+- `SC::Application::Forms::AllowedNodeKinds` — ItemsOnly, FoldersOnly, ItemsAndFolders.
+- `SC::Application::Forms::AutocompleteEntry` — id, displayText, nodeKind; використовується в `searchForAutocomplete` та в типі `AutocompleteSource`.
+
+## Приклад (фрагмент форми номенклатури)
+
+```cpp
+// Джерело автозаповнення для батьківської групи (тільки папки)
+ui->parentReferenceWidget->setAutocompleteSource(
+    [this](const QString& search, int limit) {
+        return m_queryService->searchForAutocomplete(search, AllowedNodeKinds::FoldersOnly, limit);
+    });
+
+connect(ui->parentReferenceWidget, &UniversalReferenceWidget::selectRequested, ...);
+connect(..., [this](const QByteArray& id, const QString& displayText, AllowedNodeKinds nodeKind) {
+    ui->parentReferenceWidget->applySelection(id, displayText, nodeKind);
+});
+```
+
+Посилання на ієрархію довідників та FormType — правило `catalog-hierarchy.mdc`.
